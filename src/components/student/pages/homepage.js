@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage_stud.css';
 import mainLogo from "../img/school-logo.png";
-import event_pic from "./images/event_img.jpg";
+import event_pic from "../img/event_img.jpg";
 import { Navbar, Container, Nav } from 'react-bootstrap';
 
 function HomepageStud() {
