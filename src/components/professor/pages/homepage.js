@@ -17,8 +17,7 @@ function HomepageProf() {
       />
     <Nav className="me-auto">
       <Nav.Link href="">Home</Nav.Link>
-      <Nav.Link href="">Add Course</Nav.Link>
-      <Nav.Link href="">View Grades</Nav.Link>
+      <Nav.Link href="">Courses</Nav.Link>
       <Nav.Link href="">About</Nav.Link>
       <Nav.Link href="">Logout</Nav.Link>
     </Nav>
