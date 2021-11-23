@@ -4,7 +4,7 @@ import mainLogo from "../img/school-logo.png";
 import event_pic from "../img/event_img.jpg";
 import { Navbar, Container, Nav } from 'react-bootstrap';
 
-function HomepageStud() {
+function HomepageAdmin() {
   return (
     <>
     <Navbar bg="light" variant="light">
@@ -80,4 +80,4 @@ function HomepageStud() {
   );
 }
 
-export default HomepageStud;
+export default HomepageAdmin;
