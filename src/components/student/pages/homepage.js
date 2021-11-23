@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Stylesheet/homepage_stud.css';
+import '../stylesheet/homepage_stud.css';
 import mainLogo from "../img/school-logo.png";
 import event_pic from "./images/event_img.jpg";
 import { Navbar, Container, Nav } from 'react-bootstrap';
