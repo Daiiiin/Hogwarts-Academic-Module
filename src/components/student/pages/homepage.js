@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../stylesheet/homepage_stud.css';
+import '../stylesheet/homepage.css';
 import mainLogo from "../img/school-logo.png";
 import event_pic from "../img/event_img.jpg";
 import { Navbar, Container, Nav } from 'react-bootstrap';
@@ -17,7 +17,8 @@ function HomepageStud() {
       />
     <Nav className="me-auto">
       <Nav.Link href="">Home</Nav.Link>
-      <Nav.Link href="">Courses</Nav.Link>
+      <Nav.Link href="">Add Course</Nav.Link>
+      <Nav.Link href="">View Grades</Nav.Link>
       <Nav.Link href="">About</Nav.Link>
       <Nav.Link href="">Logout</Nav.Link>
     </Nav>
