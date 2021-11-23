@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import '../stylesheet/styles.css';
 import hat from "../img/hat.png";
 import mainLogo from "../img/school-logo.png";
-// import $ from "jquery";
+import $ from "jquery";
 
 const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -41,31 +41,43 @@ const Login = () => {
                 <center>
                 <h1 className="form-header pb-3">Login</h1>
                     <Formik
-                        // initialValues={{ email: '', password: '' }}
-                        // validationSchema={Yup.object({
-                        //     email: Yup.string()
-                        //         .email('Invalid email address')
-                        //         .max(30, 'Must be 30 characters or less')
-                        //         .required('Required'),
-                        //     password: Yup.string()
-                        //         .required('Required')
-                        //         .min(6, 'Password is too short')
-                        // })}
-                        // onSubmit={(values) => {
-                        //     var data = 'email=' + values.email + '&password=' + values.password
-                        //     alert(data)
-                            // $.ajax({
-                            //     type : 'POST',
-                            //     url : 'http://localhost/hogwarts-academic-module/src/php/login-action.php',
-                            //     data : data,
-                            //     success : function(response) {
-                            //         if(response["status"] === 200){
-                            //             $('#signupForm')[0].reset();
-                            //         }
-                            //     }
-                            // });
+                        initialValues={{ email: '', password: '' }}
+                        validationSchema={Yup.object({
+                            email: Yup.string()
+                                .email('Invalid email address')
+                                .max(30, 'Must be 30 characters or less')
+                                .required('Required'),
+                            password: Yup.string()
+                                .required('Required')
+                                .min(6, 'Password is too short')
+                        })}
+                        onSubmit={(values) => {
+                            var data = 'email=' + values.email + '&password=' + values.password
+                            console.log(data);
+                            $.ajax({
+                                type : 'POST',
+                                url : 'http://localhost/hogwarts/src/php/login-action.php',
+                                data : data,
+                                success : function(response) {
+                                    if(response["status"] === 200){
+                                        if(response["type"] == "student") {
+                                            window.location.replace("student")
+                                        }
+                                        else if(response["type"] == "professor") {
+                                            window.location.replace("professor")
+                                        }
+                                        else if(response["type"] == "admin") {
+                                            window.location.replace("admin")
+                                        }
+                                        
+                                    } else {
+                                        alert("failed");
+                                    }
+                                 
+                                }
+                            });
                             
-                        // }}
+                        }}
                     >
                         <Form>
                             <div className="input-group mb-3">
