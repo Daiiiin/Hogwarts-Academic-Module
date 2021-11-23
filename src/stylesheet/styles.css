@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Rochester&display=swap');
+
+body {
+    background-color: #AB3636;
+}
+.login-header {
+    font-family: Rochester;
+    font-size: 4em;
+    color: white;
+}
+.login-quote {
+    font-family: Rochester;
+    font-size: 3em;
+    color: white;
+}
