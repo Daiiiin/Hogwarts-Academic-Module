@@ -56,7 +56,7 @@ const Login = () => {
                             console.log(data);
                             $.ajax({
                                 type : 'POST',
-                                url : 'http://localhost/hogwarts/src/php/login-action.php',
+                                url : 'http://localhost/Hogwarts-Academic-Module/src/php/login-action.php',
                                 data : data,
                                 success : function(response) {
                                     if(response["status"] === 200){
