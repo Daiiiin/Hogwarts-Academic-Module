@@ -36,11 +36,6 @@ include_once("db_connect.php");
             $_SESSION['password'] = $obj->password;
             $_SESSION['user_type'] = $obj->user_type;
             $_SESSION['user_name'] = "$obj->fname $obj->mname $obj->lname";
-            $myObj = array(
-                'status' => $status,
-                'type' => $type,
-                'message' => $retval
-            );
         }
     }
 
