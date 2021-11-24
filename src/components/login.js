@@ -71,7 +71,7 @@ const Login = () => {
                                         }
                                         
                                     } else {
-                                        alert("failed");
+                                        alert(response["message"]);
                                     }
                                  
                                 }

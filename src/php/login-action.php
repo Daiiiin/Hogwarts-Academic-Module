@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once("db_connect.php");
     require_once('./db_connect.php');
 
-    $retval = "";
+    $retval = "You have entered an invalid email or password";
     $status = 400;
     $type = "";
     $email = trim($_REQUEST['email']);
@@ -25,7 +25,7 @@ include_once("db_connect.php");
         // if($isPassword == true) {
         if($password == $obj->password) { //TEMPORARY
             $status = 200;
-            $retval = "Successfully logged in";
+            $retval = "Successful";
             $data = $obj;
             $type = $obj->user_type;
             $_SESSION['user_id'] = $obj->userID;
@@ -41,8 +41,6 @@ include_once("db_connect.php");
                 'type' => $type,
                 'message' => $retval
             );
-        } else {
-            $retval = "Wrong email or password";
         }
     }
 
