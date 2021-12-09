@@ -3,6 +3,7 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import mainLogo from "../../img/school-logo.png"; 
 import '../../stylesheet/homepage.css';
 import $ from 'jquery';
+import { Link } from "react-router-dom";
 
 class StudentHeader extends Component {
     constructor(props) {
@@ -34,14 +35,15 @@ class StudentHeader extends Component {
                 alt="Hogwarts Logo"
               />
             <Nav className="me-auto">
-              <Nav.Link href="">Home</Nav.Link>
-              <Nav.Link href="">Add Course</Nav.Link>
+              <Link to="/student" className="nav-link">Home</Link>
+              <Link to="" className="nav-link">Add Course</Link>
               <Nav.Link href="">View Grades</Nav.Link>
               <Nav.Link href="">About</Nav.Link>
               <Nav.Link onClick={this.logoutClick}>Logout</Nav.Link>
             </Nav>
             </Container>
             </Navbar>
+
           </>
           );
       }
