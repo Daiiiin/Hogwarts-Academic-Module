@@ -40,7 +40,8 @@ export default class StudentHeader extends Component {
           <Nav className="me-auto">
             <Link to="/student" className="nav-link">Home</Link>
             <Link to="/student/add-course" className="nav-link">Add Course</Link>
-            <Link to="" className="nav-link">View Grades</Link>
+            <Link to="/student/view-grades" className="nav-link">View Grades</Link>
+            <Link to="/student/about" className="nav-link">About</Link>
             <Nav.Link onClick={this.logoutClick}>Logout</Nav.Link>
           </Nav>
           </Container>
@@ -51,7 +52,7 @@ export default class StudentHeader extends Component {
     }
 }
 
-export function Home() {
+export function StudentHome() {
   return (
     <>
     <div className="events">
