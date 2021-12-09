@@ -4,8 +4,8 @@ header("Access-Control-Allow-Headers: access");
 header("Access-Control-Allow-Methods: POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-include_once("db_connect.php");
-    require_once('./db_connect.php');
+
+    require_once('db_connect.php');
 
     $retval = "You have entered an invalid email or password";
     $status = 400;
@@ -21,9 +21,8 @@ include_once("db_connect.php");
     $stmt->close();
 
     if($result->num_rows > 0) {
-        //$isPassword = password_verify($password, $obj->password);;
-        // if($isPassword == true) {
-        if($password == $obj->password) { //TEMPORARY
+        $isPassword = password_verify($password, $obj->password);
+        if($isPassword == true) {
             $status = 200;
             $retval = "Successful";
             $data = $obj;

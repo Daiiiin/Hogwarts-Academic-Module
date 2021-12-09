@@ -37,7 +37,7 @@ const Login = () => {
                 <h2 className="login-quote">"We are only as strong as we are united, weak as <br/> we are divided." -Albus Dumbledore</h2>
                 <img src={hat} alt="Sorting Hat" height="250" />
             </div>
-            <div className="col-sm-4 ms-5 bg-success form-container">
+            <div className="col-sm-4 ms-5 bg-light form-container">
                 <center>
                 <h1 className="form-header pb-3">Login</h1>
                     <Formik
@@ -53,20 +53,20 @@ const Login = () => {
                         })}
                         onSubmit={(values) => {
                             var data = 'email=' + values.email + '&password=' + values.password
-                            console.log(data);
+                            // console.log(data);
                             $.ajax({
                                 type : 'POST',
                                 url : 'http://localhost/Hogwarts-Academic-Module/src/php/login-action.php',
                                 data : data,
                                 success : function(response) {
                                     if(response["status"] === 200){
-                                        if(response["type"] == "student") {
+                                        if(response["type"] === "student") {
                                             window.location.replace("student")
                                         }
-                                        else if(response["type"] == "professor") {
+                                        else if(response["type"] === "professor") {
                                             window.location.replace("professor")
                                         }
-                                        else if(response["type"] == "admin") {
+                                        else if(response["type"] === "admin") {
                                             window.location.replace("admin")
                                         }
                                         
@@ -107,7 +107,6 @@ const Login = () => {
                             <button type="submit" className="btn btn-primary mb-4">Login</button>
                         </Form>
                     </Formik>
-                    <p>Forgot Password? <a href="#">Click here!</a></p>
                 </center>
             </div>
         </div>

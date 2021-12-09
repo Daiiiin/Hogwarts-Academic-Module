@@ -1,3 +1,8 @@
+-- user@mail.com : user123
+-- prof@mail.com : prof123
+-- admin@mail.com : admin123
+
+DROP DATABASE IF EXISTS hogwarts_academic_module;
 CREATE DATABASE hogwarts_academic_module;
 
 CREATE TABLE `users`(
@@ -6,7 +11,7 @@ CREATE TABLE `users`(
     `mname` VARCHAR(50) NOT NULL,
     `lname` VARCHAR(50) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `user_type` ENUM('student', 'professor', 'admin') NOT NULL DEFAULT 'student',
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`userID`)
@@ -62,3 +67,13 @@ CREATE TABLE `grades`(
     PRIMARY KEY(`gradeID`),
     FOREIGN KEY(`enrolledID`) REFERENCES `enrolled` (`enrolledID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO users(fname, mname, lname, email, password, user_type) 
+VALUES
+('User', 'U', 'Doe', 'user@mail.com', '$2y$10$VB2bnembPmg6j2cdXfKXAu0dLs8.KT/cNZ7/Naw1KvPkH5v5L69Gi', 1),
+('Professor', 'P', 'Doe', 'prof@mail.com', '$2y$10$RCSd5LKLdk/BmH8ked7BfeDit9gCEHsLEp70BERbYwLxX.grP89QG', 2),
+('Admin', 'A', 'Doe', 'admin@mail.com', '$2y$10$XfpWmegItPpimo/QVyjrnezJxW9iq/GLH7rl2KG7g1ohmZrrnf2Gi', 3);
+
+-- user@mail.com : user123
+-- prof@mail.com : prof123
+-- admin@mail.com : admin123
