@@ -1,8 +1,62 @@
 import React, { Component } from 'react';
-// import $ from 'jquery';
+import { useField } from "formik";
+import * as yup from "yup";
 import { Nav } from 'react-bootstrap';
 import axios from 'axios';
+import styled from "@emotion/styled";
+import "../stylesheet/styles.css"
 
+export const loginSchema = yup.object().shape({
+  email: yup.string().email('Invalid email address').required('Required'),
+  password: yup.string().required('Required')
+});
+
+export const addStudentSchema = yup.object().shape({
+  fname: yup.string().required('Required'),
+  mname: yup.string().required('Required'),
+  lname: yup.string().required('Required'),
+  email: yup.string().email('Invalid email address').required('Required'),
+  password: yup.string().required('Required'),
+  year: yup.number().required('Required'),
+  house: yup.number().required('Required')
+});
+
+const StyledErrorMessage = styled.div`
+  font-size: 12px;
+  color: var(--red-600);
+  width: 210px;
+
+  &:before {
+    content: "❌ ";
+    font-size: 10px;
+  }
+`;
+
+export const MyTextInput = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <input className="text-input" {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <StyledErrorMessage>{meta.error}</StyledErrorMessage>
+      ) : null}
+    </>
+  );
+};
+
+export const MySelect = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <div>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <select {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <StyledErrorMessage>{meta.error}</StyledErrorMessage>
+      ) : null}
+    </div>
+  );
+};
 export class LogOut extends Component {
     constructor(props) {
       super(props);

@@ -1,24 +1,12 @@
 import React from 'react';
-import { Formik, Form, useField } from "formik";
-import * as Yup from "yup";
+import { Formik, Form } from "formik";
 import '../stylesheet/styles.css';
 import hat from "../img/hat.png";
 import mainLogo from "../img/school-logo.png";
-// import $ from "jquery";
+import { MyTextInput, loginSchema } from "./action";
 import axios from 'axios';
 
-const MyTextInput = ({ label, ...props }) => {
-    const [field, meta] = useField(props);
-    return (
-      <>
-        <label htmlFor={props.id || props.name}>{label}</label>
-        <input className="text-input" {...field} {...props} />
-        {meta.touched && meta.error ? (
-          <div className="error">{meta.error}</div>
-        ) : null}
-      </>
-    );
-};
+
 
 const Login = () => {
     return (
@@ -43,15 +31,7 @@ const Login = () => {
                 <h1 className="form-header pb-3">Login</h1>
                     <Formik
                         initialValues={{ email: '', password: '' }}
-                        validationSchema={Yup.object({
-                            email: Yup.string()
-                                .email('Invalid email address')
-                                .max(30, 'Must be 30 characters or less')
-                                .required('Required'),
-                            password: Yup.string()
-                                .required('Required')
-                                .min(6, 'Password is too short')
-                        })}
+                        validationSchema={ loginSchema }
                         onSubmit={(values) => {
                             let formData = new FormData();
                             formData.append('email', values.email)
@@ -87,7 +67,7 @@ const Login = () => {
                                     <i className="fas fa-user"></i>
                                 </span>
                                 <MyTextInput
-                                    // label="Email"
+                                    label="Email"
                                     name="email"
                                     type="email"
                                     placeholder="Email"

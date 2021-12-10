@@ -4,11 +4,15 @@ import '../stylesheet/homepage.css';
 import '../stylesheet/admin-manage-stud.css';
 import event_pic from "../img/event_img.jpg";
 import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav, Button, Table, Form, Row, Col } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Table, Row, Col } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import { LogOut } from "./action";
 import Footer from "./footer";
+import { Formik, Form } from "formik";
+import { MyTextInput, MySelect, addStudentSchema } from "./action";
+import axios from 'axios';
+// import { addStudentSchema } from "./action";
 
 export function AdminHeader() {
     return(
@@ -35,7 +39,7 @@ export function AdminHeader() {
     ); 
 }
 
-  export function AdminHome() {
+export function AdminHome() {
     return (
       <>
       <div className="events">
@@ -72,9 +76,9 @@ export function AdminHeader() {
       <Footer />
       </>
     );
-  }
+}
 
-  export function ManageStud() {
+export function ManageStud() {
     return(
         <>
         <div className='ManageStudent'>
@@ -108,14 +112,103 @@ export function AdminHeader() {
         <Footer />
         </>
     );
-  }
+}
 
-  export function AddStud() {
+export function AddStud() {
     return(
         <>
         <div className="manageStud">
           <h1>Add Student</h1>
+          <Formik
+            initialValues = {{ 
+              fname: '', 
+              mname: '', 
+              lname: '', 
+              email: '', 
+              password: '',
+              year: '',
+              house: ''
+            }}
+            validationSchema = { addStudentSchema }
+            onSubmit={(values) => {
+              let formData = new FormData();
+              formData.append('fname', values.fname);
+              formData.append('mname', values.mname);
+              formData.append('lname', values.lname);
+              formData.append('email', values.email);
+              formData.append('password', values.password);
+              formData.append('year', values.year);
+              formData.append('house', values.house);
+              axios({
+                method: 'POST',
+                url: 'http://localhost/Hogwarts-Academic-Module/src/php/add-student-action.php',
+                data: formData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }},
+                withCredentials: true
+              })
+              .then(function(res) {
+                console.log(res.data);
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+            } 
+          }
+          > 
           <Form>
+            <MyTextInput
+                label="First Name"
+                name="fname"
+                type="text"
+                placeholder="First Name"
+                className="form-control"
+            />
+            <MyTextInput
+                label="Middle Name"
+                name="mname"
+                type="text"
+                placeholder="Middle Name"
+                className="form-control"
+            />
+            <MyTextInput
+                label="Last Name"
+                name="lname"
+                type="text"
+                placeholder="Last Name"
+                className="form-control"
+            />
+            <MyTextInput
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="Last Name"
+                className="form-control"
+            />
+            <MyTextInput
+                label="Password"
+                name="password"
+                type="password"
+                placeholder="Password"
+                className="form-control"
+            />
+            <MySelect label="Year Level" name="year">
+              <option value="">Select Year Level</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </MySelect>
+            <MySelect label="House" name="house">
+              <option value="">Select House</option>
+              <option value="1">Gryffindor</option>
+              <option value="2">Hufflepuff</option>
+              <option value="3">Ravenclaw</option>
+              <option value="4">Slytherin</option>
+            </MySelect>
+            <button type="submit">Submit</button>
+          </Form>
+          {/* <Form>
           <Form.Group as={Row} className="mb-3">
               <Form.Label column sm="2">
                 First Name
@@ -250,14 +343,15 @@ export function AdminHeader() {
             <Button variant="primary" type="submit">
               Submit
             </Button>
-          </Form>
+          </Form> */}
+          </Formik>
           </div>
         <Footer />
         </>
     );
-  }
+}
 
-  export function ManageProf() {
+export function ManageProf() {
     return(
         <>
         <div className='ManageStudent'>
@@ -287,9 +381,9 @@ export function AdminHeader() {
         <Footer />
         </>
     );
-  }
+}
 
-  export function AddProf() {
+export function AddProf() {
     return(
         <>
         <div className="manageStud">
@@ -347,4 +441,4 @@ export function AdminHeader() {
         <Footer />
         </>
     );
-  }
+}
