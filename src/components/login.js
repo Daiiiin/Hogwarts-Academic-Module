@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import '../stylesheet/styles.css';
 import hat from "../img/hat.png";
 import mainLogo from "../img/school-logo.png";
-import $ from "jquery";
+// import $ from "jquery";
+import axios from 'axios';
 
 const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
@@ -52,31 +53,32 @@ const Login = () => {
                                 .min(6, 'Password is too short')
                         })}
                         onSubmit={(values) => {
-                            var data = 'email=' + values.email + '&password=' + values.password
-                            // console.log(data);
-                            $.ajax({
-                                type : 'POST',
-                                url : 'http://localhost/Hogwarts-Academic-Module/src/php/login-action.php',
-                                data : data,
-                                success : function(response) {
-                                    if(response["status"] === 200){
-                                        if(response["type"] === "student") {
-                                            window.location.replace("student")
-                                        }
-                                        else if(response["type"] === "professor") {
-                                            window.location.replace("professor")
-                                        }
-                                        else if(response["type"] === "admin") {
-                                            window.location.replace("admin")
-                                        }
-                                        
-                                    } else {
-                                        alert(response["message"]);
-                                    }
-                                 
+                            let formData = new FormData();
+                            formData.append('email', values.email)
+                            formData.append('password', values.password)
+                            axios({
+                                method: 'POST',
+                                url: 'http://localhost/Hogwarts-Academic-Module/src/php/login-action.php',
+                                data: formData,
+                                config: { headers: {'Content-Type': 'multipart/form-data' }},
+                                withCredentials: true
+                            }) 
+                            .then(function(res) {
+                                if(res.data.type === "student") {
+                                    window.location.replace("student")
                                 }
+                                else if(res.data.type === "professor") {
+                                    window.location.replace("professor")
+                                }
+                                else if(res.data.type === "admin") {
+                                    window.location.replace("admin")
+                                } else {
+                                    alert(res.data.message);
+                                }
+                            })
+                            .catch(function (error) {
+                                console.log(error);
                             });
-                            
                         }}
                     >
                         <Form>
