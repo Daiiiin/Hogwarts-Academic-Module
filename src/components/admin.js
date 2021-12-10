@@ -1,9 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
+import '../stylesheet/admin-manage-stud.css';
 import event_pic from "../img/event_img.jpg";
 import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Table, Form, Row, Col } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import { LogOut } from "./action";
@@ -70,5 +71,280 @@ export function AdminHeader() {
       </div>
       <Footer />
       </>
+    );
+  }
+
+  export function ManageStud() {
+    return(
+        <>
+        <div className='ManageStudent'>
+          <Button href="/admin/studentAdd" size="lg">Add Student</Button>
+          <Table striped bordered hover variant="dark">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Year Level</th>
+                <th>House</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>User Sample</td>
+                <td>Sample</td>
+                <td>Sample</td>
+                <td>sample@mail.com</td>
+                <td>
+                <Button variant="success" type="submit">Edit</Button>{' '}
+                <Button variant="danger" type="submit">Delete</Button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+        <Footer />
+        </>
+    );
+  }
+
+  export function AddStud() {
+    return(
+        <>
+        <div className="manageStud">
+          <h1>Add Student</h1>
+          <Form>
+          <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                First Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="First Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Middle Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="Middle Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Last Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="Last Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Email
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="email" placeholder="Email" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Password
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="password" placeholder="Password" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Year Level
+              </Form.Label>
+              <Col sm="5">
+                {['radio'].map((type) => (
+                  <div key={`inline-${type}`} className="mb-3">
+                    <Form.Check
+                      inline
+                      label="1"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="2"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="3"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="4"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="5"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                  </div>
+                ))}
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                House
+              </Form.Label>
+              <Col sm="8">
+                {['radio'].map((type) => (
+                  <div key={`inline-${type}`} className="mb-3">
+                    <Form.Check
+                      inline
+                      label="Gryffindor"
+                      name="group2"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Hufflepuff"
+                      name="group2"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Ravenclaw"
+                      name="group2"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Slytherin"
+                      name="group2"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                  </div>
+                ))}
+              </Col>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+          </div>
+        <Footer />
+        </>
+    );
+  }
+
+  export function ManageProf() {
+    return(
+        <>
+        <div className='ManageStudent'>
+          <Button href="/admin/profadd" size="lg">Add Instructor</Button>
+          <Table striped bordered hover variant="dark">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Prof Sample</td>
+                <td>profsample@mail.com</td>
+                <td>
+                <Button variant="success" type="submit">Edit</Button>{' '}
+                <Button variant="danger" type="submit">Delete</Button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+        <Footer />
+        </>
+    );
+  }
+
+  export function AddProf() {
+    return(
+        <>
+        <div className="manageStud">
+          <h1>Add Instructor</h1>
+          <Form>
+          <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                First Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="First Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Middle Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="Middle Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Last Name
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="text" placeholder="Last Name" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Email
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="email" placeholder="Email" />
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="2">
+                Password
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="password" placeholder="Password" />
+              </Col>
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+          </div>
+        <Footer />
+        </>
     );
   }
