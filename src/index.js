@@ -2,14 +2,9 @@ import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
 
-import AdminHeader from './components/admin';
-import { AdminHome } from './components/admin';
-
-import ProfHeader from './components/professor';
-import { ProfHome } from './components/professor';
-
-import StudentHeader  from './components/student';
-import { StudentHome, AddCourse } from './components/student';
+import { AdminHeader, AdminHome } from './components/admin';
+import { ProfHeader, ProfHome } from './components/professor';
+import { StudentHeader, StudentHome, AddCourse } from './components/student';
 
 const rootElement = document.getElementById("root");
 render (

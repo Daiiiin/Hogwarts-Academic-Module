@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
 import event_pic from "../img/event_img.jpg";
@@ -6,50 +6,33 @@ import { Outlet, Link } from "react-router-dom";
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
-import $ from 'jquery';
+import Footer from "./footer";
+import { LogOut } from "./action";
 
-export default class StudentHeader extends Component {
-  constructor(props) {
-      super(props);
-      this.logoutClick = this.logoutClick.bind(this);
-    }
-  
-    logoutClick() {
-      $.ajax({
-        type: 'GET',
-        url: 'http://localhost/Hogwarts-Academic-Module/src/php/logout-action.php',
-        success: function(response) {
-          if(response["status"] === 200){
-            window.location.replace('/'); 
-          }
-        }
-      });
-    }
+export function StudentHeader() {    
+  return(
+    <>
+      <Navbar bg="light" variant="light">
+      <Container>
+      <img
+          src={mainLogo}
+          width="4.5%"
+          height="auto"
+          alt="Hogwarts Logo"
+        />
+      <Nav className="me-auto">
+        <Link to="/student" className="nav-link">Home</Link>
+        <Link to="/student/add-course" className="nav-link">Add Course</Link>
+        <Link to="/student/view-grades" className="nav-link">View Grades</Link>
+        <Link to="/student/about" className="nav-link">About</Link>
+        <LogOut />
+      </Nav>
+      </Container>
+      </Navbar>
+      <Outlet />
+    </>
+    );
     
-    render() {
-      return(
-        <>
-          <Navbar bg="light" variant="light">
-          <Container>
-          <img
-              src={mainLogo}
-              width="4.5%"
-              height="auto"
-              alt="Hogwarts Logo"
-            />
-          <Nav className="me-auto">
-            <Link to="/student" className="nav-link">Home</Link>
-            <Link to="/student/add-course" className="nav-link">Add Course</Link>
-            <Link to="/student/view-grades" className="nav-link">View Grades</Link>
-            <Link to="/student/about" className="nav-link">About</Link>
-            <Nav.Link onClick={this.logoutClick}>Logout</Nav.Link>
-          </Nav>
-          </Container>
-          </Navbar>
-          <Outlet />
-        </>
-        );
-    }
 }
 
 export function StudentHome() {
@@ -86,6 +69,8 @@ export function StudentHome() {
         <h4>Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam ac libero feugiat, rutrum arcu ut, cursus magna. Nam imperdiet est sapien, ultrices tincidunt magna fringilla quis. Etiam at justo est. Morbi eget risus risus. Cras ornare in risus a bibendum. In consequat ex vitae est congue.</h4>
         <h4>Phasellus pellentesque vestibulum nibh, congue pulvinar risus vestibulum et. Morbi nisl orci, pulvinar at odio sed, ornare pretium augue. Nulla suscipit dolor malesuada tempor sagittis. Nullam viverra semper diam, id volutpat mauris fringilla eu. Sed congue ante sed nibh sagittis, et congue ante pretium. Etiam vehicula nec risus posuere vehicula.</h4>
     </div>
+    <Footer />
+
     </>
   );
 }
@@ -97,3 +82,13 @@ export function AddCourse() {
       </>
   );
 }
+
+export function ViewGrades() {
+
+}
+
+export function StudentAbout() {
+
+}
+
+

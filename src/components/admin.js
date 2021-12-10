@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
 import event_pic from "../img/event_img.jpg";
@@ -6,51 +6,33 @@ import { Outlet, Link } from "react-router-dom";
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
-import $ from 'jquery';
+import { LogOut } from "./action";
+import Footer from "./footer";
 
-export default class ProfHeader extends Component {
-    constructor(props) {
-        super(props);
-        this.logoutClick = this.logoutClick.bind(this);
-      }
-    
-      logoutClick() {
-        $.ajax({
-          type: 'GET',
-          url: 'http://localhost/Hogwarts-Academic-Module/src/php/logout-action.php',
-          success: function(response) {
-            if(response["status"] === 200){
-              window.location.replace('/'); 
-            }
-          }
-        });
-      }
-      
-      render() {
-        return(
-          <>
-            <Navbar bg="light" variant="light">
-            <Container>
-            <img
-                src={mainLogo}
-                width="4.5%"
-                height="auto"
-                alt="Hogwarts Logo"
-              />
-            <Nav className="me-auto">
-              <Link to="/admin" className="nav-link">Home</Link>
-              <Link to="/admin/student" className="nav-link">Student</Link>
-              <Link to="/admin/instructor" className="nav-link">Instructor</Link>
-              <Link to="/admin/course" className="nav-link">Course</Link>
-              <Nav.Link onClick={this.logoutClick}>Logout</Nav.Link>
-            </Nav>
-            </Container>
-            </Navbar>
-            <Outlet />
-          </>
-          );
-      }
-  }
+export function AdminHeader() {
+    return(
+        <>
+          <Navbar bg="light" variant="light">
+          <Container>
+          <img
+              src={mainLogo}
+              width="4.5%"
+              height="auto"
+              alt="Hogwarts Logo"
+            />
+          <Nav className="me-auto">
+            <Link to="/admin" className="nav-link">Home</Link>
+            <Link to="/admin/student" className="nav-link">Student</Link>
+            <Link to="/admin/instructor" className="nav-link">Instructor</Link>
+            <Link to="/admin/course" className="nav-link">Course</Link>
+            <LogOut />
+          </Nav>
+          </Container>
+          </Navbar>
+          <Outlet />
+        </>
+    ); 
+}
 
   export function AdminHome() {
     return (
@@ -86,6 +68,7 @@ export default class ProfHeader extends Component {
           <h4>Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam ac libero feugiat, rutrum arcu ut, cursus magna. Nam imperdiet est sapien, ultrices tincidunt magna fringilla quis. Etiam at justo est. Morbi eget risus risus. Cras ornare in risus a bibendum. In consequat ex vitae est congue.</h4>
           <h4>Phasellus pellentesque vestibulum nibh, congue pulvinar risus vestibulum et. Morbi nisl orci, pulvinar at odio sed, ornare pretium augue. Nulla suscipit dolor malesuada tempor sagittis. Nullam viverra semper diam, id volutpat mauris fringilla eu. Sed congue ante sed nibh sagittis, et congue ante pretium. Etiam vehicula nec risus posuere vehicula.</h4>
       </div>
+      <Footer />
       </>
     );
   }

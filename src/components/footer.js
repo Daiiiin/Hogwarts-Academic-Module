@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import '../../stylesheet/homepage.css';
-import mainLogo from "../../img/school-logo.png";
-
-class Footer extends Component {
+import '../stylesheet/homepage.css';
+import mainLogo from "../img/school-logo.png";
+export default class Footer extends Component {
     render() {
         return(
             <div className="footer">
@@ -28,5 +27,3 @@ class Footer extends Component {
         );
     }
 }
-
-export default Footer;
