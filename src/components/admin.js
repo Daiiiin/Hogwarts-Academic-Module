@@ -181,7 +181,7 @@ export function AddStud() {
                 placeholder="Password"
                 className="form-control"
             />
-            <MySelect label="Year Level" name="year">
+            <MySelect class="form-select" label="Year Level" name="year">
               <option value="">Select Year Level</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -189,14 +189,14 @@ export function AddStud() {
               <option value="4">4</option>
               <option value="5">5</option>
             </MySelect>
-            <MySelect label="House" name="house">
+            <MySelect class="form-select" label="House" name="house">
               <option value="">Select House</option>
               <option value="1">Gryffindor</option>
               <option value="2">Hufflepuff</option>
               <option value="3">Ravenclaw</option>
               <option value="4">Slytherin</option>
             </MySelect>
-            <button type="submit">Submit</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
           </Form>
           </Formik>
           </div>
@@ -306,11 +306,11 @@ export function AddProf() {
                   placeholder="Password"
                   className="form-control"
               />
-              <MySelect label="Subject" name="subject">
+              <MySelect class="form-select" label="Subject" name="subject">
                 <option value="">Select Subject</option>
                 <FetchSubjects />
               </MySelect>
-              <button type="submit">Submit</button>
+              <button class="btn btn-primary" type="submit">Submit</button>
             </Form>
           </Formik>
           </div>
