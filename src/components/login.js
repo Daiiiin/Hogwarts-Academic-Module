@@ -67,7 +67,6 @@ const Login = () => {
                                     <i className="fas fa-user"></i>
                                 </span>
                                 <MyTextInput
-                                    label="Email"
                                     name="email"
                                     type="email"
                                     placeholder="Email"

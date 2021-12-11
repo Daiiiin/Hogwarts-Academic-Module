@@ -10,7 +10,7 @@ import '../stylesheet/homepage.css';
 import { LogOut } from "./action";
 import Footer from "./footer";
 import { Formik, Form } from "formik";
-import { MyTextInput, MySelect, addStudentSchema } from "./action";
+import { MyTextInput, MySelect, addStudentSchema, FetchSubject, addProfSchema } from "./action";
 import axios from 'axios';
 // import { addStudentSchema } from "./action";
 
@@ -208,142 +208,6 @@ export function AddStud() {
             </MySelect>
             <button type="submit">Submit</button>
           </Form>
-          {/* <Form>
-          <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                First Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="First Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Middle Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Middle Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Last Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Last Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Email
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="email" placeholder="Email" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Password
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="password" placeholder="Password" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Year Level
-              </Form.Label>
-              <Col sm="5">
-                {['radio'].map((type) => (
-                  <div key={`inline-${type}`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label="1"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="2"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="3"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="4"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="5"
-                      name="group1"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                  </div>
-                ))}
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                House
-              </Form.Label>
-              <Col sm="8">
-                {['radio'].map((type) => (
-                  <div key={`inline-${type}`} className="mb-3">
-                    <Form.Check
-                      inline
-                      label="Gryffindor"
-                      name="group2"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="Hufflepuff"
-                      name="group2"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="Ravenclaw"
-                      name="group2"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                    <Form.Check
-                      inline
-                      label="Slytherin"
-                      name="group2"
-                      type={type}
-                      id={`inline-${type}-1`}
-                    />
-                  </div>
-                ))}
-              </Col>
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form> */}
           </Formik>
           </div>
         <Footer />
@@ -388,56 +252,85 @@ export function AddProf() {
         <>
         <div className="manageStud">
           <h1>Add Instructor</h1>
-          <Form>
-          <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                First Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="First Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Middle Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Middle Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Last Name
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Last Name" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Email
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="email" placeholder="Email" />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm="2">
-                Password
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control type="password" placeholder="Password" />
-              </Col>
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
+          <Formik
+            initialValues = {{ 
+              fname: '', 
+              mname: '', 
+              lname: '', 
+              email: '', 
+              password: '',
+              subject: ''
+            }}
+            validationSchema = { addProfSchema }
+            onSubmit={(values) => {
+              let formData = new FormData();
+              formData.append('fname', values.fname);
+              formData.append('mname', values.mname);
+              formData.append('lname', values.lname);
+              formData.append('email', values.email);
+              formData.append('password', values.password);
+              formData.append('subject', values.subject);
+              axios({
+                method: 'POST',
+                url: 'http://localhost/Hogwarts-Academic-Module/src/php/add-prof-action.php',
+                data: formData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }},
+                withCredentials: true
+              })
+              .then(function(res) {
+                console.log(res.data);
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+            } 
+          }
+          > 
+            <Form>
+              <MyTextInput
+                  label="First Name"
+                  name="fname"
+                  type="text"
+                  placeholder="First Name"
+                  className="form-control"
+              />
+              <MyTextInput
+                  label="Middle Name"
+                  name="mname"
+                  type="text"
+                  placeholder="Middle Name"
+                  className="form-control"
+              />
+              <MyTextInput
+                  label="Last Name"
+                  name="lname"
+                  type="text"
+                  placeholder="Last Name"
+                  className="form-control"
+              />
+              <MyTextInput
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="Last Name"
+                  className="form-control"
+              />
+              <MyTextInput
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  className="form-control"
+              />
+              <MySelect label="Subject" name="subject">
+                <option value="">Select Subject</option>
+                <FetchSubject />
+              </MySelect>
+              <button type="submit">Submit</button>
+            </Form>
+          </Formik>
           </div>
+          
         <Footer />
         </>
     );

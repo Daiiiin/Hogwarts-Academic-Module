@@ -12,13 +12,22 @@ export const loginSchema = yup.object().shape({
 });
 
 export const addStudentSchema = yup.object().shape({
-  fname: yup.string().required('Required'),
-  mname: yup.string().required('Required'),
-  lname: yup.string().required('Required'),
+  fname: yup.string().min(3).required('Required'),
+  mname: yup.string().min(3).required('Required'),
+  lname: yup.string().min(3).required('Required'),
   email: yup.string().email('Invalid email address').required('Required'),
-  password: yup.string().required('Required'),
+  password: yup.string().min(5).required('Required'),
   year: yup.number().required('Required'),
   house: yup.number().required('Required')
+});
+
+export const addProfSchema = yup.object().shape({
+  fname: yup.string().min(3).required('Required'),
+  mname: yup.string().min(3).required('Required'),
+  lname: yup.string().min(3).required('Required'),
+  email: yup.string().email('Invalid email address').required('Required'),
+  password: yup.string().min(5).required('Required'),
+  subject: yup.string().required('Required')
 });
 
 const StyledErrorMessage = styled.div`
@@ -79,43 +88,78 @@ export class LogOut extends Component {
     }
 }
 
-class SandBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        };
-    }
+export class FetchSubject extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
 
-    componentDidMount() {
-        var self = this;
-        axios({
-          method: 'GET',
-          url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-user-action.php',
-          withCredentials: true
-        })
-        .then(function(res) {
-          self.setState({data: res.data});   
-        })
-        .catch(function (error) {
-          console.log(error);
-       });
-       
-    }
-    
-    render() {
-      var fetch = this.state.data;
-        return (
-              // this.state.data.map((result) => {
-              //   return (
-              //        <ul key={result.userID}>
-              //         <li>{result.userID}</li>  
-              //         <li>{result.fname}</li>    
-              //         <li>{result.lname}</li>  
-              //       </ul>
-              //    );
-              // })
-              <h1>{ fetch.fname }</h1>
-        );
-    }
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-subjects-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+      return (
+            this.state.data.map((result) => {
+              return (
+                <option name="SID" key={result.subjectID} value={result.subjectID}>{result.subject_name}</option>
+               );
+            })
+      );
+  }
+
 }
+
+// class SandBox extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             data: []
+//         };
+//     }
+
+//     componentDidMount() {
+//         var self = this;
+//         axios({
+//           method: 'GET',
+//           url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-user-action.php',
+//           withCredentials: true
+//         })
+//         .then(function(res) {
+//           self.setState({data: res.data});   
+//         })
+//         .catch(function (error) {
+//           console.log(error);
+//        });
+       
+//     }
+    
+//     render() {
+//       var fetch = this.state.data;
+//         return (
+//               this.state.data.map((result) => {
+//                 return (
+//                      <ul key={result.userID}>
+//                       <li>{result.userID}</li>  
+//                       <li>{result.fname}</li>    
+//                       <li>{result.lname}</li>  
+//                     </ul>
+//                  );
+//               })
+//               <h1>{ fetch.fname }</h1>
+//         );
+//     }
+// }

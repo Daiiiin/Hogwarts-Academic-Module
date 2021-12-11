@@ -8,16 +8,16 @@
 
     require_once('db_connect.php');
 
-    // $UID = $_SESSION['userID'];
-    $stmt = $con->prepare("SELECT * FROM users WHERE userID=?");
-    $stmt->bind_param("i", $_SESSION['userID']);
+    $stmt = $con->prepare("SELECT * FROM subject");
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
-    $r = $result->fetch_assoc();
-        
-    // var_dump($_SESSION); 
-    echo json_encode($r); 
+    $rows = array();
+    while($fetch = $result->fetch_assoc()) {
+        $rows[] = $fetch;
+    }
+
+    echo json_encode($rows); 
 
     $con->close();
 
