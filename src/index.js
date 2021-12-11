@@ -15,8 +15,8 @@ render (
         <Route path="admin" element={<AdminHeader />}>
           <Route index element={<AdminHome />}/>
           <Route path="student" element={<ManageStud />}/>
-          <Route path="studentadd" element={<AddStud />}/>
-          <Route path="studentinfo" element={<InfoStud />}/>
+          <Route path="student/studentadd" element={<AddStud />}/>
+          <Route path="student/:studentID" element={<InfoStud />}/>
           <Route path="instructor" element={<ManageProf />}/>
           <Route path="profadd" element={<AddProf />}/>
           <Route path="profinfo" element={<InfoProf />}/>

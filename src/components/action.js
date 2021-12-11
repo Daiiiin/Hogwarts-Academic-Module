@@ -158,8 +158,8 @@ export class FetchStudents extends Component {
             <td>{result.house}</td>
             <td>{result.email}</td>
             <td>
-              <Button variant="success" type="submit">Edit</Button>{' '}
-              <Button variant="danger" type="submit">Delete</Button>
+              <Button href={`/admin/student/${result.userID}`} variant="success" type="submit">View Info</Button>
+              <Button variant="danger" type="submit">Delete</Button>           
             </td>
           </tr>
         );
@@ -210,6 +210,49 @@ export class FetchProfs extends Component {
     );
   }
 }
+
+export class FetchSubjects2 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-subjects-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      this.state.data.map((result) => {
+        return (
+          <tr key={result.subjectID}>
+            <td>{result.subjectID}</td>
+            <td>{result.subject_name}</td>
+            <td>{result.description}</td>
+            <td>
+              <Button href="" variant="success" type="submit">Edit</Button>
+              <Button variant="danger" type="submit">Delete</Button>           
+            </td>
+          </tr>
+         );
+      })
+    );
+  }
+}
+
 
 // class SandBox extends Component {
 //     constructor(props) {

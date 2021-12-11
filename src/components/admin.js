@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
 import '../stylesheet/admin-manage-stud.css';
 import event_pic from "../img/event_img.jpg";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useParams } from "react-router-dom";
 import { Navbar, Container, Nav, Button, Table, Row, Col, Tab } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
-import { LogOut } from "./action";
 import Footer from "./footer";
 import { Formik, Form } from "formik";
-import { MyTextInput, MySelect, addStudentSchema, FetchSubject, addProfSchema } from "./action";
 import axios from 'axios';
-// import { addStudentSchema } from "./action";
+import { 
+  FetchProfs, FetchStudents, FetchSubjects2, LogOut, MyTextInput, MySelect, 
+  addStudentSchema, FetchSubjects, addProfSchema
+} from "./action";
 
 export function AdminHeader() {
     return(
@@ -83,7 +84,7 @@ export function ManageStud() {
         <>
         <div className='ManageStudent'>
           <Button href="/admin/studentAdd" size="lg">Add Student</Button>
-          <Table striped bordered hover variant="dark">
+          <Table striped bordered hover variant="light">
             <thead>
               <tr>
                 <th>ID</th>
@@ -95,18 +96,7 @@ export function ManageStud() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>User Sample</td>
-                <td>Sample</td>
-                <td>Sample</td>
-                <td>sample@mail.com</td>
-                <td>
-                <Button variant="success" type="submit">Edit</Button>{' '}
-                <Button variant="danger" type="submit">Delete</Button>{' '}
-                <Button href="/admin/studentinfo" variant="light" type="submit">View Info</Button>
-                </td>
-              </tr>
+              <FetchStudents />
             </tbody>
           </Table>
         </div>
@@ -192,7 +182,7 @@ export function AddStud() {
                 placeholder="Password"
                 className="form-control"
             />
-            <MySelect class="form-select" label="Year Level" name="year">
+            <MySelect className="form-select" label="Year Level" name="year">
               <option value="">Select Year Level</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -200,7 +190,7 @@ export function AddStud() {
               <option value="4">4</option>
               <option value="5">5</option>
             </MySelect>
-            <MySelect class="form-select" label="House" name="house">
+            <MySelect className="form-select" label="House" name="house">
               <option value="">Select House</option>
               <option value="1">Gryffindor</option>
               <option value="2">Hufflepuff</option>
@@ -208,7 +198,7 @@ export function AddStud() {
               <option value="4">Slytherin</option>
             </MySelect>
             <br></br>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
           </Form>
           </Formik>
           </div>
@@ -218,6 +208,44 @@ export function AddStud() {
 }
 
 export function InfoStud() {
+  const params = useParams();
+  const [grade, setGrade] = useState([]);
+  const [detail, setDetail] = useState([]);
+
+  
+
+  
+
+  useEffect(() => { 
+    const getGradeDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-student-grades-action.php?id=${params.studentID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setGrade(result);
+      });
+    }
+    getGradeDetails()
+  }, [params.studentID]);
+
+
+  useEffect(() => {
+    const getStudentDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-student-action.php?id=${params.studentID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setDetail(result);
+      });
+    }
+    getStudentDetails() 
+  }, [params.studentID]);
   return(
       <>
       <div className="infoStud">
@@ -239,79 +267,79 @@ export function InfoStud() {
             <Tab.Content>
               <Tab.Pane eventKey="first">
               <form>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Full Name:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Full Name:</label>
+                  <div className="col-sm-10">
+                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.fullname} readOnly></input>
                   </div>
                 </div>
                 <br></br>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Email:</label>
-                  <div class="col-sm-10">
-                    <input type="email" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Email:</label>
+                  <div className="col-sm-10">
+                    <input type="email" className="form-control" id="" placeholder="" defaultValue={detail.email} readOnly></input>
                   </div>
                 </div>
                 <br></br>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Year Level:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Year Level:</label>
+                  <div className="col-sm-10">
+                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.year_level} readOnly></input>
                   </div>
                 </div>
                 <br></br>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">House:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">House:</label>
+                  <div className="col-sm-10">
+                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.house} readOnly></input>
                   </div>
                 </div>
                 <br></br>
               </form>
-              <button type="button" id="edit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit
               </button>
-              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Student Information</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">Edit Student Information</h5>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div className="modal-body">
                       <form>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">First Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text"class="form-control" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">First Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text"className="form-control" placeholder="" ></input>
                           </div>
                         </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Middle Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Middle Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Last Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Last Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
                         
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Email:</label>
-                          <div class="col-sm-10">
-                            <input type="email" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Email:</label>
+                          <div className="col-sm-10">
+                            <input type="email" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
                         <br></br>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Year Level:</label>
-                          <div class="col-sm-10">
-                            <select class="form-select" label="Year Level" name="year">
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Year Level:</label>
+                          <div className="col-sm-10">
+                            <select className="form-select" label="Year Level" name="year">
                               <option value="">Select Year Level</option>
                               <option value="1">1</option>
                               <option value="2">2</option>
@@ -322,10 +350,10 @@ export function InfoStud() {
                           </div>
                         </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">House:</label>
-                          <div class="col-sm-10">
-                            <select class="form-select" label="Year Level" name="year">
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">House:</label>
+                          <div className="col-sm-10">
+                            <select className="form-select" label="Year Level" name="year">
                               <option value="">Select House</option>
                               <option value="1">Gryffindor</option>
                               <option value="2">Hufflepuff</option>
@@ -337,16 +365,16 @@ export function InfoStud() {
 
                       </form>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" className="btn btn-primary">Save changes</button>
                     </div>
                   </div>
                 </div>
               </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                <Table striped bordered hover variant="dark">
+                <Table striped bordered hover variant="light">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -357,13 +385,15 @@ export function InfoStud() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Potions</td>
-                      <td>Prof Harry</td>
-                      <td>2.1</td>
-                      <td>1.6</td>
-                    </tr>
+                    {grade.map((grades, i) => (
+                      <tr key={grades.gradeID}>
+                        <td>{i+1}</td>
+                        <td>{grades.subject_name}</td>
+                        <td>{grades.prof}</td>
+                        <td>{grades.midtermGrade}</td>
+                        <td>{grades.finalGrade}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
               </Tab.Pane>
@@ -382,26 +412,18 @@ export function ManageProf() {
         <>
         <div className='ManageStudent'>
           <Button href="/admin/profadd" size="lg">Add Instructor</Button>
-          <Table striped bordered hover variant="dark">
+          <Table striped bordered hover variant="light">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Subject</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Prof Sample</td>
-                <td>profsample@mail.com</td>
-                <td>
-                <Button variant="success" type="submit">Edit</Button>{' '}
-                <Button variant="danger" type="submit">Delete</Button>{' '}
-                <Button href="/admin/profinfo" variant="light" type="submit">View Info</Button>
-                </td>
-              </tr>
+              <FetchProfs />
             </tbody>
           </Table>
         </div>
@@ -485,12 +507,12 @@ export function AddProf() {
                   placeholder="Password"
                   className="form-control"
               />
-              <MySelect class="form-select" label="Subject" name="subject">
+              <MySelect className="form-select" label="Subject" name="subject">
                 <option value="">Select Subject</option>
-                <FetchSubject />
+                <FetchSubjects />
               </MySelect>
               <br></br>
-              <button class="btn btn-primary" type="submit">Submit</button>
+              <button className="btn btn-primary" type="submit">Submit</button>
             </Form>
           </Formik>
           </div>
@@ -522,66 +544,66 @@ export function InfoProf() {
             <Tab.Content>
               <Tab.Pane eventKey="first">
               <form>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Full Name:</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Full Name:</label>
+                  <div className="col-sm-10">
+                    <input type="text" className="form-control" id="" placeholder="" readOnly></input>
                   </div>
                 </div>
                 <br></br>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Email:</label>
-                  <div class="col-sm-10">
-                    <input type="email" class="form-control" id="" placeholder="" readOnly></input>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Email:</label>
+                  <div className="col-sm-10">
+                    <input type="email" className="form-control" id="" placeholder="" readOnly></input>
                   </div>
                 </div>
                 <br></br>
               </form>
-              <button type="button" id="edit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit
               </button>
-              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Student Information</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">Edit Student Information</h5>
+                      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div className="modal-body">
                       <form>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">First Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text"class="form-control" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">First Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text"className="form-control" placeholder="" ></input>
                           </div>
                         </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Middle Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Middle Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Last Name:</label>
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Last Name:</label>
+                          <div className="col-sm-10">
+                            <input type="text" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
                         
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Email:</label>
-                          <div class="col-sm-10">
-                            <input type="email" class="form-control" id="" placeholder="" ></input>
+                        <div className="form-group row">
+                          <label className="col-sm-2 col-form-label">Email:</label>
+                          <div className="col-sm-10">
+                            <input type="email" className="form-control" id="" placeholder="" ></input>
                           </div>
                         </div>
                         <br></br>
                       </form>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" className="btn btn-primary">Save changes</button>
                     </div>
                   </div>
                 </div>
@@ -622,27 +644,17 @@ export function ManageCourse() {
       <>
       <div className='ManageStudent'>
         <Button href="/admin/courseAdd" size="lg">Add Course</Button>
-        <Table striped bordered hover variant="dark">
+        <Table striped bordered hover variant="light">
           <thead>
             <tr>
               <th>#</th>
               <th>Course Name</th>
               <th>Course Description</th>
-              <th>Schedule</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Potions</td>
-              <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right time</td>
-              <td>MWF 9:00 AM - 10:30 AM </td>
-              <td>
-              <Button variant="success" type="submit">Edit</Button>{' '}
-              <Button variant="danger" type="submit">Delete</Button>{' '}
-              </td>
-            </tr>
+            <FetchSubjects2 />
           </tbody>
         </Table>
       </div>
@@ -657,28 +669,28 @@ export function AddCoursefromAd() {
       <div className="manageStud">
           <h1>Add Course</h1>
             <form>
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Course Name:</label>
-                <div class="col-sm-10">
-                  <input type="text"class="form-control" placeholder="" ></input>
+              <div className="form-group row">
+                <label className="col-sm-2 col-form-label">Course Name:</label>
+                <div className="col-sm-10">
+                  <input type="text"className="form-control" placeholder="" ></input>
                 </div>
               </div>
               <br></br>
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Course Description:</label>
-                <div class="col-sm-10">
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+              <div className="form-group row">
+                <label className="col-sm-2 col-form-label">Course Description:</label>
+                <div className="col-sm-10">
+                  <textarea className="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
                 </div>
               </div>
               <br></br>
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Course Schedule:</label>
-                <div class="col-sm-10">
-                  <input type="text"class="form-control" placeholder="" ></input>
+              <div className="form-group row">
+                <label className="col-sm-2 col-form-label">Course Schedule:</label>
+                <div className="col-sm-10">
+                  <input type="text"className="form-control" placeholder="" ></input>
                 </div>
               </div>
               <br></br>
-              <button class="btn btn-primary" type="submit">Submit</button>       
+              <button className="btn btn-primary" type="submit">Submit</button>       
             </form>
       </div>  
       <Footer />
