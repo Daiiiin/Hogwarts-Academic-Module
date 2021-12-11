@@ -4,13 +4,13 @@ import '../stylesheet/homepage.css';
 import '../stylesheet/admin-manage-stud.css';
 import event_pic from "../img/event_img.jpg";
 import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav, Button, Table } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Table, Row, Col, Tab } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import { LogOut } from "./action";
 import Footer from "./footer";
 import { Formik, Form } from "formik";
-import { MyTextInput, MySelect, addStudentSchema, FetchSubjects, addProfSchema, FetchStudents, FetchProfs } from "./action";
+import { MyTextInput, MySelect, addStudentSchema, FetchSubject, addProfSchema } from "./action";
 import axios from 'axios';
 // import { addStudentSchema } from "./action";
 
@@ -83,7 +83,7 @@ export function ManageStud() {
         <>
         <div className='ManageStudent'>
           <Button href="/admin/studentAdd" size="lg">Add Student</Button>
-          <Table striped bordered hover variant="light">
+          <Table striped bordered hover variant="dark">
             <thead>
               <tr>
                 <th>ID</th>
@@ -95,7 +95,18 @@ export function ManageStud() {
               </tr>
             </thead>
             <tbody>
-              <FetchStudents />
+              <tr>
+                <td>1</td>
+                <td>User Sample</td>
+                <td>Sample</td>
+                <td>Sample</td>
+                <td>sample@mail.com</td>
+                <td>
+                <Button variant="success" type="submit">Edit</Button>{' '}
+                <Button variant="danger" type="submit">Delete</Button>{' '}
+                <Button href="/admin/studentinfo" variant="light" type="submit">View Info</Button>
+                </td>
+              </tr>
             </tbody>
           </Table>
         </div>
@@ -196,7 +207,8 @@ export function AddStud() {
               <option value="3">Ravenclaw</option>
               <option value="4">Slytherin</option>
             </MySelect>
-            <button class="btn btn-primary" type="submit">Submit</button>
+            <br></br>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </Form>
           </Formik>
           </div>
@@ -205,23 +217,191 @@ export function AddStud() {
     );
 }
 
+export function InfoStud() {
+  return(
+      <>
+      <div className="infoStud">
+        <h2>Student Info</h2>
+        <br></br>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Row>
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey="first">General Information</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">Course and Grades</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+              <form>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Full Name:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Email:</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Year Level:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">House:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+              </form>
+              <button type="button" id="edit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Edit
+              </button>
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit Student Information</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">First Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text"class="form-control" placeholder="" ></input>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Middle Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Last Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Email:</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Year Level:</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" label="Year Level" name="year">
+                              <option value="">Select Year Level</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">House:</label>
+                          <div class="col-sm-10">
+                            <select class="form-select" label="Year Level" name="year">
+                              <option value="">Select House</option>
+                              <option value="1">Gryffindor</option>
+                              <option value="2">Hufflepuff</option>
+                              <option value="3">Ravenclaw</option>
+                              <option value="4">Slytherin</option>
+                            </select>
+                          </div>
+                        </div>
+
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <Table striped bordered hover variant="dark">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Course Name</th>
+                      <th>Professor</th>
+                      <th>Midterm Grade</th>
+                      <th>Final Grade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Potions</td>
+                      <td>Prof Harry</td>
+                      <td>2.1</td>
+                      <td>1.6</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+      </div>
+      <Footer />
+      </>
+  );
+}
+
 export function ManageProf() {
     return(
         <>
         <div className='ManageStudent'>
           <Button href="/admin/profadd" size="lg">Add Instructor</Button>
-          <Table striped bordered hover variant="light">
+          <Table striped bordered hover variant="dark">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Subject</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <FetchProfs />
+              <tr>
+                <td>1</td>
+                <td>Prof Sample</td>
+                <td>profsample@mail.com</td>
+                <td>
+                <Button variant="success" type="submit">Edit</Button>{' '}
+                <Button variant="danger" type="submit">Delete</Button>{' '}
+                <Button href="/admin/profinfo" variant="light" type="submit">View Info</Button>
+                </td>
+              </tr>
             </tbody>
           </Table>
         </div>
@@ -262,7 +442,6 @@ export function AddProf() {
               })
               .then(function(res) {
                 console.log(res.data);
-                window.location.replace('instructor');
               })
               .catch(function(error) {
                 console.log(error);
@@ -308,8 +487,9 @@ export function AddProf() {
               />
               <MySelect class="form-select" label="Subject" name="subject">
                 <option value="">Select Subject</option>
-                <FetchSubjects />
+                <FetchSubject />
               </MySelect>
+              <br></br>
               <button class="btn btn-primary" type="submit">Submit</button>
             </Form>
           </Formik>
@@ -320,6 +500,188 @@ export function AddProf() {
     );
 }
 
+export function InfoProf() {
+  return(
+      <>
+      <div className="infoStud">
+        <h2>Professor Info</h2>
+        <br></br>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Row>
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey="first">General Information</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">Course Handled</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+              <form>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Full Name:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Email:</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="" placeholder="" readOnly></input>
+                  </div>
+                </div>
+                <br></br>
+              </form>
+              <button type="button" id="edit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Edit
+              </button>
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit Student Information</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">First Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text"class="form-control" placeholder="" ></input>
+                          </div>
+                        </div>
 
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Middle Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
 
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Last Name:</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Email:</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="" placeholder="" ></input>
+                          </div>
+                        </div>
+                        <br></br>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <Table striped bordered hover variant="dark">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Course Name</th>
+                      <th>Course Description</th>
+                      <th>Schedule</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Potions</td>
+                      <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right time</td>
+                      <td>MWF 9:00 AM - 10:30 AM</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+      </div>
+      <Footer />
+      </>
+  );
+}
 
+export function ManageCourse() {
+  return(
+      <>
+      <div className='ManageStudent'>
+        <Button href="/admin/courseAdd" size="lg">Add Course</Button>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Course Name</th>
+              <th>Course Description</th>
+              <th>Schedule</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Potions</td>
+              <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right time</td>
+              <td>MWF 9:00 AM - 10:30 AM </td>
+              <td>
+              <Button variant="success" type="submit">Edit</Button>{' '}
+              <Button variant="danger" type="submit">Delete</Button>{' '}
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+      <Footer />
+      </>
+  );
+}
+
+export function AddCoursefromAd() {
+  return(
+      <> 
+      <div className="manageStud">
+          <h1>Add Course</h1>
+            <form>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Course Name:</label>
+                <div class="col-sm-10">
+                  <input type="text"class="form-control" placeholder="" ></input>
+                </div>
+              </div>
+              <br></br>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Course Description:</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
+                </div>
+              </div>
+              <br></br>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Course Schedule:</label>
+                <div class="col-sm-10">
+                  <input type="text"class="form-control" placeholder="" ></input>
+                </div>
+              </div>
+              <br></br>
+              <button class="btn btn-primary" type="submit">Submit</button>       
+            </form>
+      </div>  
+      <Footer />
+      </>
+  );
+}
