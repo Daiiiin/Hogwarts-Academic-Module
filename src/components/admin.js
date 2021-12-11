@@ -4,13 +4,13 @@ import '../stylesheet/homepage.css';
 import '../stylesheet/admin-manage-stud.css';
 import event_pic from "../img/event_img.jpg";
 import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav, Button, Table, Row, Col } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, Table } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import { LogOut } from "./action";
 import Footer from "./footer";
 import { Formik, Form } from "formik";
-import { MyTextInput, MySelect, addStudentSchema, FetchSubject, addProfSchema } from "./action";
+import { MyTextInput, MySelect, addStudentSchema, FetchSubjects, addProfSchema, FetchStudents, FetchProfs } from "./action";
 import axios from 'axios';
 // import { addStudentSchema } from "./action";
 
@@ -83,7 +83,7 @@ export function ManageStud() {
         <>
         <div className='ManageStudent'>
           <Button href="/admin/studentAdd" size="lg">Add Student</Button>
-          <Table striped bordered hover variant="dark">
+          <Table striped bordered hover variant="light">
             <thead>
               <tr>
                 <th>ID</th>
@@ -95,17 +95,7 @@ export function ManageStud() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>User Sample</td>
-                <td>Sample</td>
-                <td>Sample</td>
-                <td>sample@mail.com</td>
-                <td>
-                <Button variant="success" type="submit">Edit</Button>{' '}
-                <Button variant="danger" type="submit">Delete</Button>
-                </td>
-              </tr>
+              <FetchStudents />
             </tbody>
           </Table>
         </div>
@@ -220,25 +210,18 @@ export function ManageProf() {
         <>
         <div className='ManageStudent'>
           <Button href="/admin/profadd" size="lg">Add Instructor</Button>
-          <Table striped bordered hover variant="dark">
+          <Table striped bordered hover variant="light">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Subject</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Prof Sample</td>
-                <td>profsample@mail.com</td>
-                <td>
-                <Button variant="success" type="submit">Edit</Button>{' '}
-                <Button variant="danger" type="submit">Delete</Button>
-                </td>
-              </tr>
+              <FetchProfs />
             </tbody>
           </Table>
         </div>
@@ -279,6 +262,7 @@ export function AddProf() {
               })
               .then(function(res) {
                 console.log(res.data);
+                window.location.replace('instructor');
               })
               .catch(function(error) {
                 console.log(error);
@@ -324,7 +308,7 @@ export function AddProf() {
               />
               <MySelect label="Subject" name="subject">
                 <option value="">Select Subject</option>
-                <FetchSubject />
+                <FetchSubjects />
               </MySelect>
               <button type="submit">Submit</button>
             </Form>
@@ -335,3 +319,7 @@ export function AddProf() {
         </>
     );
 }
+
+
+
+
