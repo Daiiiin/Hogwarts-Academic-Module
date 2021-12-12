@@ -51,6 +51,17 @@ export const editProfSchema = yup.object().shape({
   subjectID: yup.number().required('Required')
 });
 
+export const addCourseSchema = yup.object().shape({
+  subject_name: yup.string().min(3).required('Required'),
+  description: yup.string().required('Required')
+});
+
+export const editCourseSchema = yup.object().shape({
+  subjectID: yup.number(),
+  subject_name: yup.string().min(3).required('Required'),
+  description: yup.string().min(5).required('Required')
+});
+
 const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: var(--red-600);
@@ -68,6 +79,19 @@ export const MyTextInput = ({ label, ...props }) => {
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
       <input className="text-input" {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <StyledErrorMessage>{meta.error}</StyledErrorMessage>
+      ) : null}
+    </>
+  );
+};
+
+export const MyTextArea = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <textarea className="text-input" {...field} {...props} />
       {meta.touched && meta.error ? (
         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
       ) : null}
@@ -261,8 +285,7 @@ export class FetchSubjects2 extends Component {
             <td>{result.subject_name}</td>
             <td>{result.description}</td>
             <td>
-              <Button href="" variant="success" type="submit">Edit</Button>
-              <Button variant="danger" type="submit">Delete</Button>           
+            <Button href={`/admin/course/${result.subjectID}`} variant="success" type="submit">View Info</Button>           
             </td>
           </tr>
          );

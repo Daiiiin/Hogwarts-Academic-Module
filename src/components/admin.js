@@ -12,7 +12,8 @@ import { Formik, Form } from "formik";
 import axios from 'axios';
 import { 
   FetchProfs, FetchStudents, FetchSubjects2, LogOut, MyTextInput, MySelect, 
-  addStudentSchema, FetchSubjects, addProfSchema, editStudentSchema, editProfSchema
+  addStudentSchema, FetchSubjects, addProfSchema, editStudentSchema, editProfSchema,
+  MyTextArea, addCourseSchema, editCourseSchema
 } from "./action";
 
 export function AdminHeader() {
@@ -138,7 +139,8 @@ export function AddStud() {
                 withCredentials: true
               })
               .then(function(res) {
-                console.log(res.data);
+                window.location.replace('/admin/student');
+                alert(res.data.message);
               })
               .catch(function(error) {
                 console.log(error);
@@ -506,7 +508,8 @@ export function AddProf() {
                 withCredentials: true
               })
               .then(function(res) {
-                console.log(res.data);
+                window.location.replace('/admin/instructor');
+                alert(res.data.message);
               })
               .catch(function(error) {
                 console.log(error);
@@ -776,7 +779,7 @@ export function ManageCourse() {
   return(
       <>
       <div className='ManageStudent'>
-        <Button href="/admin/courseAdd" size="lg">Add Course</Button>
+        <Button href="/admin/course/courseAdd" size="lg">Add Course</Button>
         <Table striped bordered hover variant="light">
           <thead>
             <tr>
@@ -797,35 +800,203 @@ export function ManageCourse() {
 }
 
 export function AddCoursefromAd() {
+  const formStructure = { subject_name: '', description: '' }
   return(
       <> 
       <div className="manageStud">
-          <h1>Add Course</h1>
-            <form>
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Course Name:</label>
-                <div className="col-sm-10">
-                  <input type="text"className="form-control" placeholder="" ></input>
-                </div>
-              </div>
+        <h1>Add Course</h1>
+        <Formik
+            initialValues = { formStructure }
+            validationSchema = { addCourseSchema }
+            onSubmit={(values) => {
+              let formData = new FormData();
+              formData.append('subject_name', values.subject_name);
+              formData.append('description', values.description);
+              axios({
+                method: 'POST',
+                url: 'http://localhost/Hogwarts-Academic-Module/src/php/add-course-action.php',
+                data: formData,
+                config: { headers: {'Content-Type': 'multipart/form-data' }},
+                withCredentials: true
+              })
+              .then(function(res) {
+                window.location.replace('/admin/course');
+                alert(res.data.message);
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+            } 
+          }
+          > 
+            <Form>
+              <MyTextInput
+                  label="Course Name"
+                  name="subject_name"
+                  type="text"
+                  className="form-control"
+              />
+              <MyTextArea
+                  label="Course Description"
+                  name="description"
+                  className="form-control"
+              /> 
               <br></br>
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Course Description:</label>
-                <div className="col-sm-10">
-                  <textarea className="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
-                </div>
-              </div>
-              <br></br>
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Course Schedule:</label>
-                <div className="col-sm-10">
-                  <input type="text"className="form-control" placeholder="" ></input>
-                </div>
-              </div>
-              <br></br>
-              <button className="btn btn-primary" type="submit">Submit</button>       
-            </form>
+              <button className="btn btn-primary" type="submit">Submit</button>
+            </Form>
+          </Formik>
       </div>  
+      <Footer />
+      </>
+  );
+}
+
+export function InfoCourse() {
+  const params = useParams();
+  const [detail, setDetail] = useState([]);
+  const [valueDetail, setValueDetail] = useState();
+
+  function deleteClick() {
+    axios({
+      method: 'get',
+      url: `http://localhost/Hogwarts-Academic-Module/src/php/delete-course-action.php?id=${params.subjectID}`,
+      withCredentials: true
+    })
+    .then(function(res) {
+      alert(res.data.message);
+      if(res.data.status === 200) { 
+        window.location.replace('/admin/course'); 
+      }
+    });
+  }
+
+  useEffect(() => {
+    const getCourseDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-subject-action.php?id=${params.subjectID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setDetail(result);
+        console.log(result);
+      });
+    }
+    getCourseDetails() 
+  }, [params.subjectID]);
+
+  useEffect(() => { 
+    const getCourseValueDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-subject-action.php?id=${params.subjectID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setValueDetail(result);
+      });
+    }
+    getCourseValueDetails()
+  }, [params.subjectID]);
+  return(
+      <>
+      <div className="infoStud">
+        <h2>Course Info</h2>
+        <br></br>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Row>
+          <Col sm={3}>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+              <form>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Course Name:</label>
+                  <div className="col-sm-10">
+                    <input type="text" className="form-control" defaultValue={detail.subject_name} readOnly></input>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <label className="col-sm-2 col-form-label">Course Description:</label>
+                  <div className="col-sm-10">
+                    <textarea className="form-control" id="exampleFormControlTextarea1" rows="7" defaultValue={detail.description} readOnly></textarea>
+                  </div>
+                </div>
+                <br></br>
+              </form>
+              <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>{' '}
+              <button onClick={deleteClick} className="btn btn-danger ms-5">Delete</button>
+              <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalLabel">Edit Course Information</h5> 
+                      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                    <Formik
+                      enableReinitialize={true}
+                      initialValues = { valueDetail }
+                      validationSchema = { editCourseSchema }
+                      onSubmit={(values) => {
+                        let formData = new FormData();
+                        formData.append('subjectID', values.subjectID);
+                        formData.append('subject_name', values.subject_name);
+                        formData.append('description', values.description);
+                        axios({
+                          method: 'POST',
+                          url: 'http://localhost/Hogwarts-Academic-Module/src/php/edit-course-action.php',
+                          data: formData,
+                          config: { headers: {'Content-Type': 'multipart/form-data' }},
+                          withCredentials: true
+                        }).then(function(res) {
+                          alert(res.data.message);
+                          if(res.data.status === 200) { 
+                            window.location.reload(false); 
+                          }
+                        });
+                        
+                      } 
+                    }
+                    > 
+                      <Form>
+                        <MyTextInput
+                            name="subjectID"
+                            type="hidden"
+                        />
+                        <MyTextInput
+                            label="Course Name"
+                            name="subject_name"
+                            type="text"
+                            placeholder="Course Name"
+                            className="form-control"
+                        />
+                        <MyTextArea
+                            label="Course Description"
+                            name="description"
+                            placeholder="Course Description"
+                            className="form-control"
+                        />
+                        <br></br>
+                        <div className="modal-footer">
+                          <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" className="btn btn-primary">Save changes</button>
+                        </div>
+                      </Form>
+                    </Formik>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+      </div>
       <Footer />
       </>
   );
