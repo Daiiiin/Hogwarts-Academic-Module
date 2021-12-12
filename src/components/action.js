@@ -41,6 +41,16 @@ export const editStudentSchema = yup.object().shape({
   year_level: yup.number().required('Required')
 });
 
+export const editProfSchema = yup.object().shape({
+  userID: yup.number(),
+  fname: yup.string().min(3).required('Required'),
+  mname: yup.string().min(3).required('Required'),
+  lname: yup.string().min(3).required('Required'),
+  email: yup.string().email('Invalid email address').required('Required'),
+  password: yup.string().min(5),
+  subjectID: yup.number().required('Required')
+});
+
 const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: var(--red-600);
@@ -168,8 +178,7 @@ export class FetchStudents extends Component {
             <td>{result.house}</td>
             <td>{result.email}</td>
             <td>
-              <Button href={`/admin/student/${result.userID}`} variant="success" type="submit">View Info</Button>
-              <Button variant="danger" type="submit">Delete</Button>           
+              <Button href={`/admin/student/${result.userID}`} variant="success" type="submit">View Info</Button>          
             </td>
           </tr>
         );
@@ -190,7 +199,7 @@ export class FetchProfs extends Component {
     var self = this;
     axios({
       method: 'GET',
-      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-prof-action.php',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-profs-action.php',
       withCredentials: true
     })
     .then(function(res) {
@@ -211,8 +220,7 @@ export class FetchProfs extends Component {
             <td>{result.email}</td>
             <td>{result.subject_name}</td>
             <td>
-              <Button variant="success" type="submit">Edit</Button>{' '}
-              <Button variant="danger" type="submit">Delete</Button>
+            <Button href={`/admin/instructor/${result.userID}`} variant="success" type="submit">View Info</Button>
             </td>
           </tr>
         );
@@ -262,8 +270,6 @@ export class FetchSubjects2 extends Component {
     );
   }
 }
-
-
 // class SandBox extends Component {
 //     constructor(props) {
 //         super(props);

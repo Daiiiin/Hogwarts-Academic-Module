@@ -1,4 +1,5 @@
-<?php 
+<?php
+
     header("Access-Control-Allow-Origin: http://localhost:3000");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Headers: access");
@@ -8,23 +9,25 @@
 
     require_once('db_connect.php');
 
-    $PID = $_GET['id'];
+    $message = "";
+    $status = 400;
 
-    $sql = "SELECT u.*, CONCAT(u.fname, ' ', u.mname, ' ', u.lname) AS fullname, s.*  FROM users u
-            JOIN professor p ON u.userID = p.userID
-            JOIN subject s ON p.subjectID = s.subjectID
-            WHERE u.userID = ?";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("i", $PID);
+    $id = $_GET['id'];
+
+    $stmt = $con->prepare("DELETE FROM users WHERE userID = ? LIMIT 1");
+    $stmt->bind_param("i", $id);
     $stmt->execute();
-    $result = $stmt->get_result();
     $stmt->close();
-    $rows = array();
-    while($fetch = $result->fetch_assoc()) {
-        $rows = $fetch;
-    }
 
-    echo json_encode($rows); 
+    $status = 200;
+    $message = "Deleted successfully";
+
+    $myObj = array(
+        'status' => $status,
+        'message' => $message  
+    );
+    $myJSON = json_encode($myObj, JSON_FORCE_OBJECT);
+    echo $myJSON;
 
     $con->close();
 

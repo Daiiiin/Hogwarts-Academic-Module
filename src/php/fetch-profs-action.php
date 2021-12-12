@@ -8,20 +8,17 @@
 
     require_once('db_connect.php');
 
-    $PID = $_GET['id'];
-
-    $sql = "SELECT u.*, CONCAT(u.fname, ' ', u.mname, ' ', u.lname) AS fullname, s.*  FROM users u
+    $sql = "SELECT u.userID, CONCAT(u.fname, ' ', u.mname, ' ', u.lname) AS fullname, u.email, s.subject_name FROM users u
             JOIN professor p ON u.userID = p.userID
             JOIN subject s ON p.subjectID = s.subjectID
-            WHERE u.userID = ?";
+            WHERE user_type = 2";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param("i", $PID);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
     $rows = array();
     while($fetch = $result->fetch_assoc()) {
-        $rows = $fetch;
+        $rows[] = $fetch;
     }
 
     echo json_encode($rows); 

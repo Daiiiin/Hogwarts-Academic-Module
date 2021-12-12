@@ -18,8 +18,8 @@ render (
           <Route path="student/studentadd" element={<AddStud />}/>
           <Route path="student/:studentID" element={<InfoStud />}/>
           <Route path="instructor" element={<ManageProf />}/>
-          <Route path="profadd" element={<AddProf />}/>
-          <Route path="profinfo" element={<InfoProf />}/>
+          <Route path="instructor/instructoradd" element={<AddProf />}/>
+          <Route path="instructor/:profID" element={<InfoProf />}/>
           <Route path="course" element={<ManageCourse />}/>
           <Route path="courseadd" element={<AddCoursefromAd />}/>
         </Route>

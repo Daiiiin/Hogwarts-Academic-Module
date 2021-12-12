@@ -22,16 +22,16 @@ CREATE TABLE `student`(
     `userID` INT NOT NULL,
     `year_level` ENUM('1','2','3','4','5') NOT NULL DEFAULT '1',
     `house` ENUM('Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin') NOT NULL,
-    `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
+    -- `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
     PRIMARY KEY(`studentID`),
-    FOREIGN KEY(`userID`) REFERENCES `users` (`userID`)
+    FOREIGN KEY(`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `subject`(
     `subjectID` INT NOT NULL AUTO_INCREMENT,
     `subject_name` VARCHAR(100) NOT NULL,
     `description` VARCHAR(150) NOT NULL,
-    `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
+    -- `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(`subjectID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -41,8 +41,8 @@ CREATE TABLE `professor`(
     `userID` INT NOT NULL,
     `subjectID` INT NOT NULL,
     PRIMARY KEY(`professorID`),
-    FOREIGN KEY(`userID`) REFERENCES `users` (`userID`),
-    FOREIGN KEY(`subjectID`) REFERENCES `subject` (`subjectID`)
+    FOREIGN KEY(`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE,
+    FOREIGN KEY(`subjectID`) REFERENCES `subject` (`subjectID`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `enrolled`(
@@ -52,8 +52,8 @@ CREATE TABLE `enrolled`(
     `dropped` ENUM('0','1') NOT NULL DEFAULT '0',
     `date_enrolled` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(`enrolledID`),
-    FOREIGN KEY(`studentID`) REFERENCES `student` (`studentID`),
-    FOREIGN KEY(`professorID`) REFERENCES `professor` (`professorID`)
+    FOREIGN KEY(`studentID`) REFERENCES `student` (`studentID`) ON DELETE CASCADE,
+    FOREIGN KEY(`professorID`) REFERENCES `professor` (`professorID`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `grades`(
@@ -63,7 +63,7 @@ CREATE TABLE `grades`(
     `finalGrade` INT,
     `date_modified` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(`gradeID`),
-    FOREIGN KEY(`enrolledID`) REFERENCES `enrolled` (`enrolledID`)
+    FOREIGN KEY(`enrolledID`) REFERENCES `enrolled` (`enrolledID`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO users(fname, mname, lname, email, password, user_type) VALUES

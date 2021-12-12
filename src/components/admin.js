@@ -12,7 +12,7 @@ import { Formik, Form } from "formik";
 import axios from 'axios';
 import { 
   FetchProfs, FetchStudents, FetchSubjects2, LogOut, MyTextInput, MySelect, 
-  addStudentSchema, FetchSubjects, addProfSchema, editStudentSchema
+  addStudentSchema, FetchSubjects, addProfSchema, editStudentSchema, editProfSchema
 } from "./action";
 
 export function AdminHeader() {
@@ -213,6 +213,20 @@ export function InfoStud() {
   const [detail, setDetail] = useState([]);
   const [valueDetail, setValueDetail] = useState();
 
+  function deleteClick() {
+    axios({
+      method: 'get',
+      url: `http://localhost/Hogwarts-Academic-Module/src/php/delete-student-action.php?id=${params.studentID}`,
+      withCredentials: true
+    })
+    .then(function(res) {
+      alert(res.data.message);
+      if(res.data.status === 200) { 
+        window.location.replace('/admin/student'); 
+      }
+    });
+  }
+
   useEffect(() => { 
     const getGradeDetails = () => {
       axios({
@@ -238,7 +252,6 @@ export function InfoStud() {
       .then(function(res) {
         const result = res.data;
         setDetail(result);
-        setValueDetail(result);
       });
     }
     getStudentDetails() 
@@ -254,7 +267,6 @@ export function InfoStud() {
       .then(function(res) {
         const result = res.data;
         setValueDetail(result);
-        console.log(result);
       });
     }
     getStudentValueDetails()
@@ -283,7 +295,7 @@ export function InfoStud() {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Full Name:</label>
                   <div className="col-sm-10">
-                    <input type="text" className="form-control" placeholder="" defaultValue={detail.fullname} readOnly></input>
+                    <input type="text" className="form-control" defaultValue={detail.fullname} readOnly></input>
                   </div>
                 </div>
                 <br></br>
@@ -309,9 +321,8 @@ export function InfoStud() {
                 </div>
                 <br></br>
               </form>
-              <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Edit
-              </button>
+              <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+              <button onClick={deleteClick} className="btn btn-danger ms-5">Delete</button>
               <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                   <div className="modal-content">
@@ -449,7 +460,7 @@ export function ManageProf() {
     return(
         <>
         <div className='ManageStudent'>
-          <Button href="/admin/profadd" size="lg">Add Instructor</Button>
+          <Button href="/admin/instructor/instructoradd" size="lg">Add Instructor</Button>
           <Table striped bordered hover variant="light">
             <thead>
               <tr>
@@ -555,6 +566,54 @@ export function AddProf() {
 }
 
 export function InfoProf() {
+  const params = useParams();
+  const [detail, setDetail] = useState([]);
+  const [valueDetail, setValueDetail] = useState();
+
+  function deleteClick() {
+    axios({
+      method: 'get',
+      url: `http://localhost/Hogwarts-Academic-Module/src/php/delete-student-action.php?id=${params.profID}`,
+      withCredentials: true
+    })
+    .then(function(res) {
+      alert(res.data.message);
+      if(res.data.status === 200) { 
+        window.location.replace('/admin/instructor'); 
+      }
+    });
+  }
+
+  useEffect(() => {
+    const getProfDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-prof-action.php?id=${params.profID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setDetail(result);
+      });
+    }
+    getProfDetails() 
+  }, [params.profID]);
+
+  useEffect(() => { 
+    const getProfValueDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-prof-value-action.php?id=${params.profID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setValueDetail(result);
+        console.log(result);
+      });
+    }
+    getProfValueDetails()
+  }, [params.profID]);
   return(
       <>
       <div className="infoStud">
@@ -579,14 +638,14 @@ export function InfoProf() {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Full Name:</label>
                   <div className="col-sm-10">
-                    <input type="text" className="form-control" id="" placeholder="" readOnly></input>
+                    <input type="text" className="form-control" defaultValue={detail.fullname} readOnly></input>
                   </div>
                 </div>
                 <br></br>
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Email:</label>
                   <div className="col-sm-10">
-                    <input type="email" className="form-control" id="" placeholder="" readOnly></input>
+                    <input type="email" className="form-control" defaultValue={detail.email} readOnly></input>
                   </div>
                 </div>
                 <br></br>
@@ -594,69 +653,111 @@ export function InfoProf() {
               <button type="button" id="edit-button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit
               </button>
+              <button onClick={deleteClick} className="btn btn-danger ms-5">Delete</button>
               <div className="modal fade" id="exampleModal"  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalLabel">Edit Student Information</h5>
+                      <h5 className="modal-title" id="exampleModalLabel">Edit Professor Information</h5>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                      <form>
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">First Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text"className="form-control" placeholder="" ></input>
-                          </div>
-                        </div>
-
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Middle Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
-
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Last Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
-                        
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Email:</label>
-                          <div className="col-sm-10">
-                            <input type="email" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
+                    <Formik
+                      enableReinitialize={true}
+                      initialValues = { valueDetail }
+                      validationSchema = { editProfSchema } 
+                      onSubmit={(values) => {
+                        let formData = new FormData();
+                        formData.append('userID', values.userID);
+                        formData.append('fname', values.fname);
+                        formData.append('mname', values.mname);
+                        formData.append('lname', values.lname);
+                        formData.append('email', values.email);
+                        formData.append('password', values.password);
+                        formData.append('subject', values.subjectID);
+                        axios({
+                          method: 'POST',
+                          url: 'http://localhost/Hogwarts-Academic-Module/src/php/edit-prof-action.php',
+                          data: formData,
+                          config: { headers: {'Content-Type': 'multipart/form-data' }},
+                          withCredentials: true
+                        }).then(function(res) {
+                          alert(res.data.message);
+                          if(res.data.status === 200) { 
+                            window.location.reload(false); 
+                          }
+                        });
+                      } 
+                    }
+                    > 
+                      <Form>
+                        <MyTextInput
+                            name="userID"
+                            type="hidden"
+                        />
+                        <MyTextInput
+                            label="First Name"
+                            name="fname"
+                            type="text"
+                            placeholder="First Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Middle Name"
+                            name="mname"
+                            type="text"
+                            placeholder="Middle Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Last Name"
+                            name="lname"
+                            type="text"
+                            placeholder="Last Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Email"
+                            name="email"
+                            type="email"
+                            placeholder="Last Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Password"
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            className="form-control"
+                        />
+                        <MySelect className="form-select" label="Course" name="subjectID">
+                          <option value="">Select Course</option>
+                          <FetchSubjects />
+                        </MySelect>
                         <br></br>
-                      </form>
-                    </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary">Save changes</button>
-                    </div>
+                        <div className="modal-footer">
+                          <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" className="btn btn-primary">Save changes</button>
+                        </div>
+                      </Form>
+                    </Formik>
+                    </div>               
                   </div>
                 </div>
               </div>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                <Table striped bordered hover variant="dark">
+                <Table striped bordered hover variant="light">
                   <thead>
                     <tr>
-                      <th>#</th>
                       <th>Course Name</th>
                       <th>Course Description</th>
-                      <th>Schedule</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>1</td>
-                      <td>Potions</td>
-                      <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right time</td>
-                      <td>MWF 9:00 AM - 10:30 AM</td>
+                      <td>{detail.subject_name}</td>
+                      <td>{detail.description}</td>
                     </tr>
                   </tbody>
                 </Table>
@@ -729,3 +830,4 @@ export function AddCoursefromAd() {
       </>
   );
 }
+
