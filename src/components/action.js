@@ -31,6 +31,16 @@ export const addProfSchema = yup.object().shape({
   subject: yup.string().required('Required')
 });
 
+export const editStudentSchema = yup.object().shape({
+  userID: yup.number(),
+  fname: yup.string().min(3).required('Required'),
+  mname: yup.string().min(3).required('Required'),
+  lname: yup.string().min(3).required('Required'),
+  email: yup.string().email('Invalid email address').required('Required'),
+  password: yup.string().min(5),
+  year_level: yup.number().required('Required')
+});
+
 const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: var(--red-600);

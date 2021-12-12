@@ -12,7 +12,7 @@ import { Formik, Form } from "formik";
 import axios from 'axios';
 import { 
   FetchProfs, FetchStudents, FetchSubjects2, LogOut, MyTextInput, MySelect, 
-  addStudentSchema, FetchSubjects, addProfSchema
+  addStudentSchema, FetchSubjects, addProfSchema, editStudentSchema
 } from "./action";
 
 export function AdminHeader() {
@@ -83,7 +83,7 @@ export function ManageStud() {
     return(
         <>
         <div className='ManageStudent'>
-          <Button href="/admin/studentAdd" size="lg">Add Student</Button>
+          <Button href="/admin/student/studentAdd" size="lg">Add Student</Button>
           <Table striped bordered hover variant="light">
             <thead>
               <tr>
@@ -211,10 +211,7 @@ export function InfoStud() {
   const params = useParams();
   const [grade, setGrade] = useState([]);
   const [detail, setDetail] = useState([]);
-
-  
-
-  
+  const [valueDetail, setValueDetail] = useState();
 
   useEffect(() => { 
     const getGradeDetails = () => {
@@ -231,7 +228,6 @@ export function InfoStud() {
     getGradeDetails()
   }, [params.studentID]);
 
-
   useEffect(() => {
     const getStudentDetails = () => {
       axios({
@@ -242,16 +238,33 @@ export function InfoStud() {
       .then(function(res) {
         const result = res.data;
         setDetail(result);
+        setValueDetail(result);
       });
     }
     getStudentDetails() 
+  }, [params.studentID]);
+
+  useEffect(() => { 
+    const getStudentValueDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-student-value-action.php?id=${params.studentID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setValueDetail(result);
+        console.log(result);
+      });
+    }
+    getStudentValueDetails()
   }, [params.studentID]);
   return(
       <>
       <div className="infoStud">
         <h2>Student Info</h2>
         <br></br>
-      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
         <Row>
           <Col sm={3}>
             <Nav variant="pills" className="flex-column">
@@ -270,28 +283,28 @@ export function InfoStud() {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Full Name:</label>
                   <div className="col-sm-10">
-                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.fullname} readOnly></input>
+                    <input type="text" className="form-control" placeholder="" defaultValue={detail.fullname} readOnly></input>
                   </div>
                 </div>
                 <br></br>
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Email:</label>
                   <div className="col-sm-10">
-                    <input type="email" className="form-control" id="" placeholder="" defaultValue={detail.email} readOnly></input>
+                    <input type="email" className="form-control" placeholder="" defaultValue={detail.email} readOnly></input>
                   </div>
                 </div>
                 <br></br>
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Year Level:</label>
                   <div className="col-sm-10">
-                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.year_level} readOnly></input>
+                    <input type="text" className="form-control" placeholder="" defaultValue={detail.year_level} readOnly></input>
                   </div>
                 </div>
                 <br></br>
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">House:</label>
                   <div className="col-sm-10">
-                    <input type="text" className="form-control" id="" placeholder="" defaultValue={detail.house} readOnly></input>
+                    <input type="text" className="form-control" placeholder="" defaultValue={detail.house} readOnly></input>
                   </div>
                 </div>
                 <br></br>
@@ -307,72 +320,96 @@ export function InfoStud() {
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                      <form>
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">First Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text"className="form-control" placeholder="" ></input>
-                          </div>
-                        </div>
+                    <Formik
+                      enableReinitialize={true}
+                      initialValues = { valueDetail }
+                      validationSchema = { editStudentSchema }
+                      onSubmit={(values) => {
+                        let formData = new FormData();
+                        formData.append('userID', values.userID);
+                        formData.append('fname', values.fname);
+                        formData.append('mname', values.mname);
+                        formData.append('lname', values.lname);
+                        formData.append('email', values.email);
+                        formData.append('password', values.password);
+                        formData.append('year_level', values.year_level);
+                        axios({
+                          method: 'POST',
+                          url: 'http://localhost/Hogwarts-Academic-Module/src/php/edit-student-action.php',
+                          data: formData,
+                          config: { headers: {'Content-Type': 'multipart/form-data' }},
+                          withCredentials: true
+                        }).then(function(res) {
+                          alert(res.data.message);
+                          if(res.data.status === 200) { 
+                            window.location.reload(false); 
+                          }
 
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Middle Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
-
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Last Name:</label>
-                          <div className="col-sm-10">
-                            <input type="text" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
+                        });
                         
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Email:</label>
-                          <div className="col-sm-10">
-                            <input type="email" className="form-control" id="" placeholder="" ></input>
-                          </div>
-                        </div>
+                      } 
+                    }
+                    > 
+                      <Form>
+                        <MyTextInput
+                            name="userID"
+                            type="hidden"
+                        />
+                        <MyTextInput
+                            label="First Name"
+                            name="fname"
+                            type="text"
+                            placeholder="First Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Middle Name"
+                            name="mname"
+                            type="text"
+                            placeholder="Middle Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Last Name"
+                            name="lname"
+                            type="text"
+                            placeholder="Last Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Email"
+                            name="email"
+                            type="email"
+                            placeholder="Last Name"
+                            className="form-control"
+                        />
+                        <MyTextInput
+                            label="Password"
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            className="form-control"
+                        />
+                        <MySelect className="form-select" label="Year Level" name="year_level">
+                          <option value="">Select Year Level</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </MySelect>
                         <br></br>
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">Year Level:</label>
-                          <div className="col-sm-10">
-                            <select className="form-select" label="Year Level" name="year">
-                              <option value="">Select Year Level</option>
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5</option>
-                            </select>
-                          </div>
+                        <div className="modal-footer">
+                          <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" className="btn btn-primary">Save changes</button>
                         </div>
-
-                        <div className="form-group row">
-                          <label className="col-sm-2 col-form-label">House:</label>
-                          <div className="col-sm-10">
-                            <select className="form-select" label="Year Level" name="year">
-                              <option value="">Select House</option>
-                              <option value="1">Gryffindor</option>
-                              <option value="2">Hufflepuff</option>
-                              <option value="3">Ravenclaw</option>
-                              <option value="4">Slytherin</option>
-                            </select>
-                          </div>
-                        </div>
-
-                      </form>
-                    </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
+                      </Form>
+                    </Formik>
+                  </div> 
                 </div>
               </div>
-              </Tab.Pane>
+            </div>
+            </Tab.Pane>
               <Tab.Pane eventKey="second">
                 <Table striped bordered hover variant="light">
                   <thead>
@@ -405,6 +442,7 @@ export function InfoStud() {
       <Footer />
       </>
   );
+  
 }
 
 export function ManageProf() {
@@ -433,19 +471,13 @@ export function ManageProf() {
 }
 
 export function AddProf() {
+    const formStructure = { fname: '', mname: '', lname: '', email: '', password: '',subject: '' }
     return(
         <>
         <div className="manageStud">
           <h1>Add Instructor</h1>
           <Formik
-            initialValues = {{ 
-              fname: '', 
-              mname: '', 
-              lname: '', 
-              email: '', 
-              password: '',
-              subject: ''
-            }}
+            initialValues = { formStructure }
             validationSchema = { addProfSchema }
             onSubmit={(values) => {
               let formData = new FormData();
