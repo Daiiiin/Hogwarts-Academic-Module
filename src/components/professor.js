@@ -41,7 +41,7 @@ export function ProfHeader() {
     );    
 }
 
-  export function ProfHome() {
+export function ProfHome() {
     return (
       <>
       <div className="events">
@@ -78,7 +78,7 @@ export function ProfHeader() {
       <Footer />
       </>
     );
-  }
+}
 
   export function ManageCoursefromProf() {
     return(

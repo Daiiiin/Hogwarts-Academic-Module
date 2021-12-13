@@ -14,7 +14,7 @@ import { Navbar, Container, Nav, Tabs, Tab, Table, Button} from 'react-bootstrap
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import Footer from "./footer";
-import { LogOut } from "./action";
+import { FetchStudentSubjects, FetchStudentSubjectsTaken, FetchSubjectsStudentGrades, LogOut } from "./action";
 
 export function StudentHeader() {    
   return(
@@ -88,46 +88,34 @@ export function AddCourse() {
         <div className='ManageCoursefromStud'>
           <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
             <Tab eventKey="home" title="Available Courses">
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="light">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Course Name</th>
                   <th>Description</th>
+                  <th>Instructor</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Potions</td>
-                  <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right tim</td>
-                  <td>
-                  <Button variant="primary" type="submit">Add</Button>
-                  </td>
-                </tr>
+                <FetchStudentSubjects />
               </tbody>
             </Table>
             </Tab>
             <Tab eventKey="profile" title="Courses Taken">
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant="light">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Course Name</th>
                   <th>Description</th>
+                  <th>Instructor</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Potions</td>
-                  <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right tim</td>
-                  <td>
-                  <Button variant="primary" type="submit">Remove</Button>
-                  </td>
-                </tr>
+                <FetchStudentSubjectsTaken />
               </tbody>
             </Table>
             </Tab>
@@ -143,7 +131,7 @@ export function ViewGrades() {
   return(
       <>
         <div className='ManageCoursefromStud'>
-        <Table striped bordered hover variant="dark">
+        <Table striped bordered hover variant="light">
               <thead>
                 <tr>
                   <th>#</th>
@@ -154,13 +142,7 @@ export function ViewGrades() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Potions</td>
-                  <td>1.2</td>
-                  <td>1.4</td>
-                  <td>PASSED</td>
-                </tr>
+                <FetchSubjectsStudentGrades />
               </tbody>
             </Table>
         </div>

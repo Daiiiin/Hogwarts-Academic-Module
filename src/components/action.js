@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { useField } from "formik";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as yup from "yup";
 import { Nav } from 'react-bootstrap';
 import axios from 'axios';
@@ -335,6 +336,130 @@ export class FetchStudentsGrades extends Component {
             <td>
               <Button href={`/professor/grading/${result.userID}`} variant="success" type="submit">Edit Grades</Button>           
             </td>
+          </tr>
+         );
+      })
+    );
+  }
+}
+
+export class FetchStudentSubjects extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-subjects-enroll-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      this.state.data.map((result, i) => {
+        return (
+          <tr key={i}>
+            <td>{result.subjectID}</td>
+            <td>{result.subject_name}</td>
+            <td>{result.description}</td>
+            <td>{result.fullname}</td>
+            <td>
+            <a type="submit" className="btn btn-primary" variant="success" href={`http://localhost/Hogwarts-Academic-Module/src/php/enroll-course-action.php?id=${result.subjectID}`}>Enroll</a>           
+            </td>
+          </tr>
+         );
+      })
+    );
+  }
+}
+
+export class FetchStudentSubjectsTaken extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-subjects-enrolled-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      this.state.data.map((result, i) => {
+        return (
+          <tr key={i}>
+            <td>{result.subjectID}</td>
+            <td>{result.subject_name}</td>
+            <td>{result.description}</td>
+            <td>{result.fullname}</td>
+            <td>
+            <a type="submit" className="btn btn-danger" variant="success" href={`http://localhost/Hogwarts-Academic-Module/src/php/drop-course-action.php?id=${result.enrolledID}`}>Drop</a>           
+            </td>
+          </tr>
+         );
+      })
+    );
+  }
+}
+
+export class FetchSubjectsStudentGrades extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-subjects-student-grades-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      this.state.data.map((result, i) => {
+        return (
+          <tr key={i}>
+            <td>{i+1}</td>
+            <td>{result.subject_name}</td>
+            <td>{result.midtermGrade}</td>
+            <td>{result.finalGrade}</td>
+            <td>{result.remark}</td>
           </tr>
          );
       })

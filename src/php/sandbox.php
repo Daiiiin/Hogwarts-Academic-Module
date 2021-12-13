@@ -32,20 +32,49 @@
 
     // echo json_encode($rows);
 
-    $sql = "SELECT s.*, sc.DoW,CONCAT(sc.start_time, ' - ', sc.end_time) sched, sc.start_time FROM subject s
-            JOIN schedule sc ON s.subjectID = sc.subjectID";
-    $stmt = $con->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
-    $rows = array();
-    while($fetch = $result->fetch_assoc()) {
-        $rows[] = $fetch;
-    }
+    // $sql = "SELECT s.*, sc.DoW,CONCAT(sc.start_time, ' - ', sc.end_time) sched, sc.start_time FROM subject s
+    //         JOIN schedule sc ON s.subjectID = sc.subjectID";
+    // $stmt = $con->prepare($sql);
+    // $stmt->execute();
+    // $result = $stmt->get_result();
+    // $stmt->close();
+    // $rows = array();
+    // while($fetch = $result->fetch_assoc()) {
+    //     $rows[] = $fetch;
+    // }
 
-    echo json_encode($rows);
+    // echo json_encode($rows);
 
-    $con->close();
-    
+    // $con->close();
+
+    $id = $_GET['id'];
+    var_dump($_SESSION);
+    echo $id;
+    echo ' ' . $_SESSION['studentID'];
+
+    // $sql = "SELECT DISTINCT s.*, CONCAT(u.fname, ' ', u.mname, ' ', u.lname) AS fullname, p.professorID FROM subject s
+    //         JOIN professor p ON s.subjectID = p.subjectID
+    //         JOIN users u ON p.userID = u.userID
+    //         JOIN enrolled e ON p.professorID = e.professorID
+    //         WHERE e.studentID != 8 AND p.professorID NOT IN (
+    //             SELECT p.professorID FROM subject s
+    //             JOIN professor p ON s.subjectID = p.subjectID
+    //             JOIN users u ON p.userID = u.userID
+    //             JOIN enrolled e ON p.professorID = e.professorID
+    //             WHERE e.studentID = ?
+    //         )";
+    // $id = 8;
+
+    // $stmt = $con->prepare($sql);
+    // $stmt->bind_param("i" ,$id);
+    // $stmt->execute();
+    // $result = $stmt->get_result();
+    // $stmt->close();
+    // $rows = array();
+    // while($fetch = $result->fetch_assoc()) {
+    //     $rows[] = $fetch;
+    // }
+
+    // echo json_encode($rows); 
 
 ?>

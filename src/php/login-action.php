@@ -14,8 +14,9 @@
     $email = trim($_REQUEST['email']);
     $password = trim($_REQUEST['password']);
 
-    $sql = "SELECT u.*, p.* FROM users u 
+    $sql = "SELECT u.*, p.professorID, s.studentID FROM users u 
             LEFT JOIN professor p ON u.userID = p.userID
+            LEFT JOIN student s ON u.userID = s.userID
             WHERE u.email=?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("s", $email);
@@ -40,6 +41,9 @@
             $_SESSION['user_name'] = "$obj->fname $obj->mname $obj->lname";
             if($type == 'professor') {
                 $_SESSION['professorID'] = $obj->professorID;
+            }
+            if($type == 'student') {
+                $_SESSION['studentID'] = $obj->studentID;
             }
         }
     }   
