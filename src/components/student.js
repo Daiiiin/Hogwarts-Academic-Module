@@ -1,9 +1,16 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
+import '../stylesheet/student.css';
+import '../stylesheet/about.css';
+import AboutUs from "../img/about_us.jpg";
+import Slytherin from "../img/slytherin.png";
+import Hufflepuff from "../img/hufflepuff.png";  
+import Gryffindor from "../img/gryffindor.png";    
+import Ravenclaw from "../img/ravenclaw.png";  
 import event_pic from "../img/event_img.jpg";
 import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, Tabs, Tab, Table, Button} from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png"; 
 import '../stylesheet/homepage.css';
 import Footer from "./footer";
@@ -78,17 +85,167 @@ export function StudentHome() {
 export function AddCourse() {
   return(
       <>
-      <h1>Test</h1>
+        <div className='ManageCoursefromStud'>
+          <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
+            <Tab eventKey="home" title="Available Courses">
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Potions</td>
+                  <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right tim</td>
+                  <td>
+                  <Button variant="primary" type="submit">Add</Button>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+            </Tab>
+            <Tab eventKey="profile" title="Courses Taken">
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Potions</td>
+                  <td>Potions is described as the art of creating mixtures with magical effects. It required the correct mixing and stirring of ingredients at the right tim</td>
+                  <td>
+                  <Button variant="primary" type="submit">Remove</Button>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+            </Tab>
+          </Tabs>
+        </div>
+
+        <Footer />
       </>
   );
 }
 
 export function ViewGrades() {
+  return(
+      <>
+        <div className='ManageCoursefromStud'>
+        <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course Name</th>
+                  <th>Midterm Grade</th>
+                  <th>Final Grade</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Potions</td>
+                  <td>1.2</td>
+                  <td>1.4</td>
+                  <td>PASSED</td>
+                </tr>
+              </tbody>
+            </Table>
+        </div>
 
+        <Footer />
+      </>
+  );
 }
 
 export function StudentAbout() {
+  return(
+      <>
+      <div className='about_page'>
+        <h1>Welcome to Hogwarts!</h1>
+        <div class="container">  
+          <div className='first'>
+            <img
+            src={AboutUs}
+            width="100%"
+            height="auto"
+            alt="About Us"
+            />
+          </div>  
+          <div className='second'>
+            <p>
+            Since its founding, Hogwarts has committed to offering the best educational experience in a structured, supportive environment. Our boarding and day program for boys in grades four through nine is unique in its ability to meet each student at his learning threshold and then truly maximize his potential. Hogrwarts parents frequently give us credit for providing what is a transformative experience for their sons.
 
+            Hogwarts was founded around 990 A.D.  Practicality and compassion drove the genesis, along with a commitment to providing a structured, supportive, and challenging academic environment. Hogwart's diverse offerings and character education have contributed to the development of superbly well-rounded young men for over a century. Hogwarts students, then and now, are encouraged to take risks with the knowledge that sometimes they will fail, but the support of their school community will never waver. Basic tenets such as determination, compassion, and tolerance guided Hillside students in 1901, just as they do today. The relevance of Hogwart's founding principles remains, and these values continue to shape the school community.
+            </p>
+          </div>   
+        </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <center><h1>THE FOUR HOUSES</h1></center>
+        <div class="container2">  
+          <div className='slytherin'>
+            <div><img
+            src={Slytherin}
+            width="100%"
+            height="auto"
+            alt="Slytherin"
+            /></div>
+            <div className='slytherin-text'><p>Our emblem is the serpent, the wisest of creatures; our house colours are emerald green and silver, and our common room lies behind a concealed entrance down in the dungeons. As you’ll see, its windows look out into the depths of the Hogwarts lake. We often see the giant squid swooshing by – and sometimes more interesting creatures. We like to feel that our hangout has the aura of a mysterious, underwater shipwreck.</p></div>
+          
+          </div>  
+          <div className='hufflepuff'>
+            <div><img
+            src={Hufflepuff}
+            width="100%"
+            height="auto"
+            alt="hufflepuff"
+            /></div>
+            <div className='hufflepuff-text'><p>Our emblem is the badger, an animal that is often underestimated, because it lives quietly until attacked, but which, when provoked, can fight off animals much larger than itself, including wolves. Our house colours are yellow and black, and our common room lies one floor below the ground, on the same corridor as the kitchens.</p></div>
+          
+          </div>   
+        </div>
+
+        <div class="container3">  
+          <div className='ravenclaw'>
+            <div>
+              <img
+                src={Ravenclaw}
+                width="100%"
+                height="auto"
+                alt="ravenclaw"
+                />
+            </div>
+            <div className='ravenclaw-text'><p>Our emblem is the eagle, which soars where others cannot climb; our house colours are blue and bronze, and our common room is found at the top of Ravenclaw Tower, behind a door with an enchanted knocker. The arched windows set into the walls of our circular common room look down at the school grounds: the lake, the Forbidden Forest, the Quidditch pitch and the Herbology gardens. No other house in the school has such stunning views.</p></div>
+          </div>  
+          <div className='gryffindor'>
+            <div><img
+            src={Gryffindor}
+            width="100%"
+            height="auto"
+            alt="gryffindor"
+            /></div>
+            <div className='gryffindor-text'><p>Our emblem is the lion, the bravest of all creatures; our house colours are scarlet and gold, and our common room lies up in Gryffindor Tower.</p></div>
+          </div>   
+        </div>
+                  
+      </div>
+      <Footer />
+      </>
+  );
 }
 
 

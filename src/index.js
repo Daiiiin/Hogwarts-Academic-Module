@@ -4,7 +4,7 @@ import Login from './components/login';
 
 import { AdminHeader, AdminHome, ManageStud, AddStud, ManageProf, AddProf, InfoStud, InfoProf, ManageCourse, AddCoursefromAd, InfoCourse } from './components/admin';
 import { EditGrade, ManageCoursefromProf, ProfHeader, ProfHome, AboutUsProf } from './components/professor';
-import { StudentHeader, StudentHome, AddCourse } from './components/student';
+import { StudentHeader, StudentHome, AddCourse, ViewGrades, StudentAbout } from './components/student';
 
 const rootElement = document.getElementById("root");
 render (
@@ -30,14 +30,13 @@ render (
           <Route path="grading" element={<ManageCoursefromProf />}/>
           <Route path="grading/:studentID" element={<EditGrade />}/>
           <Route path="about" element={<AboutUsProf />}/>
-          {/* About */}
         </Route>
 
         <Route path="student" element={<StudentHeader />}>
           <Route index element={<StudentHome />}/>
           <Route path="add-course" element={<AddCourse />}/>
-          {/* View Grades */}
-          {/* About */}
+          <Route path="view-grades" element={<ViewGrades />}/>
+          <Route path="about" element={<StudentAbout />}/>
         </Route>
 
       </Routes>
