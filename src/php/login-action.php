@@ -14,7 +14,10 @@
     $email = trim($_REQUEST['email']);
     $password = trim($_REQUEST['password']);
 
-    $stmt = $con->prepare("SELECT * FROM users WHERE email = ?");
+    $sql = "SELECT u.*, p.* FROM users u 
+            LEFT JOIN professor p ON u.userID = p.userID
+            WHERE u.email=?";
+    $stmt = $con->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -35,6 +38,9 @@
             $_SESSION['password'] = $obj->password;
             $_SESSION['user_type'] = $obj->user_type;
             $_SESSION['user_name'] = "$obj->fname $obj->mname $obj->lname";
+            if($type == 'professor') {
+                $_SESSION['professorID'] = $obj->professorID;
+            }
         }
     }   
     $myObj = array(

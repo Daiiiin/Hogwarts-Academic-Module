@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../stylesheet/homepage.css';
 import '../stylesheet/about.css';
 import event_pic from "../img/event_img.jpg";
-import { Outlet, Link } from "react-router-dom";
-import { Navbar, Container, Nav, Table, Button } from 'react-bootstrap';
+import { Outlet, Link, useParams } from "react-router-dom";
+import { Navbar, Container, Nav, Table } from 'react-bootstrap';
 import mainLogo from "../img/school-logo.png";
 import AboutUs from "../img/about_us.jpg";
 import Slytherin from "../img/slytherin.png";
@@ -12,8 +12,10 @@ import Hufflepuff from "../img/hufflepuff.png";
 import Gryffindor from "../img/gryffindor.png";    
 import Ravenclaw from "../img/ravenclaw.png";  
 import '../stylesheet/homepage.css';
-import { LogOut } from "./action";
 import Footer from "./footer";
+import { Formik, Form } from "formik";
+import { editGradesSchema, FetchStudentsGrades, LogOut, MyTextInput } from "./action";
+import axios from 'axios';
 
 export function ProfHeader() {      
     return(
@@ -28,7 +30,7 @@ export function ProfHeader() {
           />
         <Nav className="me-auto">
           <Link to="/professor" className="nav-link">Home</Link>
-          <Link to="/professor/courses" className="nav-link">Courses</Link>
+          <Link to="/professor/grading" className="nav-link">Grading</Link>
           <Link to="/professor/about" className="nav-link">About</Link>
           <LogOut />
         </Nav>
@@ -82,11 +84,10 @@ export function ProfHeader() {
     return(
         <>
         <div className='ManageStudent'>
-          <Table striped bordered hover variant="dark">
+          <Table striped bordered hover variant="light">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Course Name</th>
                 <th>Student Name</th>
                 <th>Midterm Grade</th>
                 <th>Final Grade</th>
@@ -94,16 +95,7 @@ export function ProfHeader() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Potions</td>
-                <td>Hermoine Granger</td>
-                <td>1.2</td>
-                <td>1.4</td>
-                <td>
-                <Button href="/professor/gradeadd" variant="info" type="submit">Add / Edit</Button>{' '}
-                </td>
-              </tr>
+              <FetchStudentsGrades />
             </tbody>
           </Table>
         </div>
@@ -112,60 +104,78 @@ export function ProfHeader() {
     );
 }
 
-export function AddGrade() {
+export function EditGrade() {
+  const params = useParams();
+  const [valueDetail, setValueDetail] = useState();
+
+  useEffect(() => {
+    const getGradesDetails = () => {
+      axios({
+        method: 'GET',
+        url: `http://localhost/Hogwarts-Academic-Module/src/php/fetch-grades-student-action.php?id=${params.studentID}`,
+        withCredentials: true
+      })
+      .then(function(res) {
+        const result = res.data;
+        setValueDetail(result);
+      });
+    }
+    getGradesDetails() 
+  }, [params.studentID]);
   return(
       <> 
       <div className="manageStud">
-          <h1>Add Grade</h1>
-            <form>
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Midterm Grade:</label>
-                <div class="col-sm-10">
-                  <input type="text"class="form-control" placeholder="" ></input>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Final Grade:</label>
-                <div class="col-sm-10">
-                  <input type="text"class="form-control" placeholder="" ></input>
-                </div>
-              </div>
-              <br></br>
-              <button class="btn btn-primary" type="submit">Submit</button>     
-            </form>
-            <br></br>
-            <button type="button"class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Course Grades</h5> 
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Midterm Grade:</label>
-                          <div class="col-sm-10">
-                            <input type="text"class="form-control" placeholder="" ></input>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-2 col-form-label">Final Grade:</label>
-                          <div class="col-sm-10">
-                          <input type="text"class="form-control" placeholder="" ></input>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-success">Save changes</button>
-                    </div>
-                  </div>
-                </div>
-              </div>  
-      </div>  
+          <h1>Edit Grades</h1>
+            <Formik
+              enableReinitialize={true}
+              initialValues = { valueDetail }
+              validationSchema = { editGradesSchema }
+              onSubmit={(values) => {
+                let formData = new FormData();
+                formData.append('gradeID', values.gradeID);
+                formData.append('midtermGrade', values.midtermGrade);
+                formData.append('finalGrade', values.finalGrade);
+                axios({
+                  method: 'POST',
+                  url: 'http://localhost/Hogwarts-Academic-Module/src/php/edit-grades-action.php',
+                  data: formData,
+                  config: { headers: {'Content-Type': 'multipart/form-data' }},
+                  withCredentials: true
+                })
+                .then(function(res) {
+                  window.location.replace('/professor/grading');
+                  alert(res.data.message);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+              } 
+            }
+            >
+              <Form>
+              <MyTextInput
+                    name="gradeID"
+                    type="hidden"
+                    className="form-control"
+                />
+                <MyTextInput
+                    label="Midterm Grade"
+                    name="midtermGrade"
+                    type="text"
+                    className="form-control"
+                />
+                <MyTextInput
+                    label="Final Grade"
+                    name="finalGrade"
+                    type="text"
+                    className="form-control"
+                /> 
+                <br></br>
+                <button className="btn btn-primary" type="submit">Submit</button>
+              </Form>
+            </Formik>
+            <br></br>  
+            </div>
       <Footer />
       </>
   );

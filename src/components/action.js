@@ -62,6 +62,12 @@ export const editCourseSchema = yup.object().shape({
   description: yup.string().min(5).required('Required')
 });
 
+export const editGradesSchema = yup.object().shape({
+  userID: yup.number(),
+  midtermGrade: yup.number().min(1, 'Must be 1-5').max(5, 'Must be 1-5'),
+  finalGrade: yup.number().min(1, 'Must be 1-5').max(5, 'Must be 1-5')
+});
+
 const StyledErrorMessage = styled.div`
   font-size: 12px;
   color: var(--red-600);
@@ -293,6 +299,49 @@ export class FetchSubjects2 extends Component {
     );
   }
 }
+
+export class FetchStudentsGrades extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    var self = this;
+    axios({
+      method: 'GET',
+      url: 'http://localhost/Hogwarts-Academic-Module/src/php/fetch-students-grades-action.php',
+      withCredentials: true
+    })
+    .then(function(res) {
+      self.setState({data: res.data});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  render() {
+    return (
+      this.state.data.map((result) => {
+        return (
+          <tr key={result.userID}>
+            <td>{result.userID}</td>
+            <td>{result.fullname}</td>
+            <td>{result.midtermGrade}</td>
+            <td>{result.finalGrade}</td>
+            <td>
+              <Button href={`/professor/grading/${result.userID}`} variant="success" type="submit">Edit Grades</Button>           
+            </td>
+          </tr>
+         );
+      })
+    );
+  }
+}
+
 // class SandBox extends Component {
 //     constructor(props) {
 //         super(props);
