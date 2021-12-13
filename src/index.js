@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
 
 import { AdminHeader, AdminHome, ManageStud, AddStud, ManageProf, AddProf, InfoStud, InfoProf, ManageCourse, AddCoursefromAd, InfoCourse } from './components/admin';
-import { ProfHeader, ProfHome } from './components/professor';
+import { AddGrade, ManageCoursefromProf, ProfHeader, ProfHome, AboutUsProf } from './components/professor';
 import { StudentHeader, StudentHome, AddCourse } from './components/student';
 
 const rootElement = document.getElementById("root");
@@ -27,7 +27,9 @@ render (
 
         <Route path="professor" element={<ProfHeader />}>
           <Route index element={<ProfHome />}/>
-          {/* Course */}
+          <Route path="courses" element={<ManageCoursefromProf />}/>
+          <Route path="gradeadd" element={<AddGrade />}/>
+          <Route path="about" element={<AboutUsProf />}/>
           {/* About */}
         </Route>
 
