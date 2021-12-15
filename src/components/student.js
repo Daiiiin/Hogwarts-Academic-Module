@@ -29,7 +29,7 @@ export function StudentHeader() {
         />
       <Nav className="me-auto">
         <Link to="/student" className="nav-link">Home</Link>
-        <Link to="/student/add-course" className="nav-link">Add Course</Link>
+        <Link to="/student/add-course" className="nav-link">Courses</Link>
         <Link to="/student/view-grades" className="nav-link">View Grades</Link>
         <Link to="/student/about" className="nav-link">About</Link>
         <LogOut />
